@@ -1,0 +1,71 @@
+/* ============================================================
+   Q Bazaar — responsive layer + button normalisation.
+   Loaded AFTER styles.css so it can refine the captured design.
+   The base design already flex-wraps; this file tightens buttons,
+   guards against horizontal overflow, restacks the absolutely-
+   positioned "Find Places" pills, and tunes tablet / mobile.
+   ============================================================ */
+
+/* ---- overflow safety -------------------------------------- */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, svg, video { max-width: 100%; }
+
+/* ---- button normalisation (consistent, tighter height) ----
+   Buttons carry inline padding from the design; we only adjust
+   the line-height + icon alignment so they don't render taller
+   than needed, and keep pill/nav icon buttons square.          */
+.qb-btn { line-height: 1.15; }
+.qb-btn svg { flex: 0 0 auto; }
+.qb-nav.qb-btn { line-height: 0; }
+
+/* ---- "Find Places" scattered pills ------------------------ */
+@media (max-width: 760px) {
+  .qb-places {
+    position: relative;
+    max-width: 100% !important;
+    height: auto !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 10px;
+  }
+  .qb-places > span {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+  }
+}
+
+/* ---- tablet ----------------------------------------------- */
+@media (max-width: 900px) {
+  /* keep two-column areas from squeezing text too hard */
+  main, section { min-width: 0; }
+}
+
+/* ---- mobile ----------------------------------------------- */
+@media (max-width: 600px) {
+  /* let flex children shrink instead of forcing overflow */
+  header * { min-width: 0; }
+
+  /* full-width primary actions read better on a phone */
+  .qb-btn[style*="width:100%"],
+  .qb-btn[style*="width: 100%"] { width: 100% !important; }
+
+  /* tighten oversized fixed widths so cards fit the screen */
+  [style*="min-width:300px"],
+  [style*="min-width: 300px"],
+  [style*="min-width:560px"],
+  [style*="min-width: 560px"],
+  [style*="flex:2 1 560px"] { min-width: 0 !important; }
+
+  /* chat message cards + bubbles fit narrow screens */
+  .qb-oc { width: 100%; max-width: 100%; }
+}
+
+/* ---- carousel arrows: smaller on touch screens ------------ */
+@media (max-width: 600px) {
+  .qb-slide-btn { width: 36px; height: 36px; font-size: 20px; }
+  .qb-slide-prev { left: 0; }
+  .qb-slide-next { right: 0; }
+}
