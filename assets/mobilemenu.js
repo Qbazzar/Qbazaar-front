@@ -39,7 +39,19 @@
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
     +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);text-decoration:none;color:#2b2b2b;position:fixed}'
     + '.qb-mbell .dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:' + ORANGE + '}'
-    + '@media (max-width:760px){ .qb-mbell{display:flex} }'
+    + '.qb-mglobe{display:none;position:fixed;top:14px;right:120px;z-index:99990;width:44px;height:44px;'
+    +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
+    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#2b2b2b}'
+    + '.qb-langpop{display:none;position:fixed;top:64px;right:16px;z-index:99993;width:210px;background:#fff;'
+    +   'border:1px solid rgb(237,237,237);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.18);padding:8px;font-family:Poppins}'
+    + '.qb-langpop.open{display:block}'
+    + '.qb-langpop h4{font:600 11px Poppins;letter-spacing:.06em;text-transform:uppercase;color:#999;padding:6px 10px;margin:0}'
+    + '.qb-langpop button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:9px 10px;'
+    +   'border-radius:9px;cursor:pointer;font:500 14px Poppins;color:#333;text-align:left}'
+    + '.qb-langpop button:hover{background:rgb(250,250,250)}'
+    + '.qb-langpop button.on{background:rgb(255,240,234);color:' + ORANGE + '}'
+    + '.qb-langpop .flag{font-size:16px}'
+    + '@media (max-width:760px){ .qb-mbell,.qb-mglobe{display:flex} }'
     + '.qb-mdrawer-back{position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:99991;opacity:0;pointer-events:none;transition:opacity .25s}'
     + '.qb-mdrawer{position:fixed;top:0;left:0;bottom:0;z-index:99992;width:86vw;max-width:340px;background:#fff;'
     +   'transform:translateX(-102%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;'
@@ -87,6 +99,23 @@
     bell.id = 'qb-mbell'; bell.className = 'qb-mbell'; bell.href = 'notifications.html'; bell.setAttribute('aria-label', 'Notifications');
     bell.innerHTML = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + I.bell + '</svg><span class="dot"></span>';
 
+    // globe -> language picker (matches Figma mobile header)
+    var LANGS = [['English', '🇬🇧'], ['Arabic', '🇸🇦'], ['India', '🇮🇳'], ['Urdu', '🇵🇰'], ['Bengali', '🇧🇩'], ['Tagalog', '🇵🇭'], ['Persian (Farsi)', '🇮🇷'], ['Tamil', '🇮🇳']];
+    var globe = document.createElement('button');
+    globe.id = 'qb-mglobe'; globe.className = 'qb-mglobe'; globe.setAttribute('aria-label', 'Language');
+    globe.innerHTML = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>';
+    var pop = document.createElement('div'); pop.className = 'qb-langpop';
+    pop.innerHTML = '<h4>Choose your language</h4>' + LANGS.map(function (l, i) {
+      return '<button data-lang="' + l[0] + '"' + (i === 0 ? ' class="on"' : '') + '><span class="flag">' + l[1] + '</span>' + l[0] + '</button>';
+    }).join('');
+    globe.addEventListener('click', function (e) { e.stopPropagation(); pop.classList.toggle('open'); });
+    pop.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-lang]'); if (!b) return;
+      pop.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on'); pop.classList.remove('open');
+    });
+    document.addEventListener('click', function () { pop.classList.remove('open'); });
+
     var back = document.createElement('div'); back.className = 'qb-mdrawer-back';
     back.addEventListener('click', function () { setOpen(false); });
 
@@ -110,6 +139,8 @@
 
     document.body.appendChild(back);
     document.body.appendChild(drawer);
+    document.body.appendChild(pop);
+    document.body.appendChild(globe);
     document.body.appendChild(bell);
     document.body.appendChild(burger);
     if (window.__qbMenuOpen) setOpen(true);

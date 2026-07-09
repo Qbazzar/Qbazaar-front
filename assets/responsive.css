@@ -61,6 +61,15 @@ img, svg, video { max-width: 100%; }
 
   /* chat message cards + bubbles fit narrow screens */
   .qb-oc { width: 100%; max-width: 100%; }
+
+  /* Home hero search: collapse to a single search field (Figma mobile) */
+  form[style*="max-width: 1000px"] { padding: 6px 6px 6px 4px !important; }
+  form[style*="max-width: 1000px"] > :not(:first-child) { display: none !important; }
+  form[style*="max-width: 1000px"] > :first-child { width: 100% !important; flex: 1 1 100% !important; }
+
+  /* Categories: 2-column grid on mobile (Figma mobile) */
+  [style*="minmax(300px, 1fr)"] { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  [style*="minmax(300px, 1fr)"] > * { min-width: 0 !important; }
 }
 
 /* ---- carousel arrows: smaller on touch screens ------------ */
