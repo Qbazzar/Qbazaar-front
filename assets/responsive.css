@@ -70,6 +70,17 @@ img, svg, video { max-width: 100%; }
   /* Categories: 2-column grid on mobile (Figma mobile) */
   [style*="minmax(300px, 1fr)"] { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
   [style*="minmax(300px, 1fr)"] > * { min-width: 0 !important; }
+
+  /* Notification filter tabs (All / Price Change / Unread / …): compact pills
+     in a single horizontally-scrollable row instead of wrapping. */
+  [style*="border-radius: 40px"] { padding: 9px 16px !important; font-size: 13.5px !important; white-space: nowrap; }
+  :has(> [style*="border-radius: 40px"]) {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  :has(> [style*="border-radius: 40px"])::-webkit-scrollbar { display: none; }
 }
 
 /* ---- carousel arrows: smaller on touch screens ------------ */
