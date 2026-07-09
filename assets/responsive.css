@@ -81,6 +81,18 @@ img, svg, video { max-width: 100%; }
     scrollbar-width: none;
   }
   :has(> [style*="border-radius: 40px"])::-webkit-scrollbar { display: none; }
+
+  /* Breadcrumbs: keep on one line, scroll horizontally instead of wrapping. */
+  .qb-crumbs {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    font-size: 12.5px !important;
+    margin-bottom: 16px !important;
+  }
+  .qb-crumbs > * { white-space: nowrap; flex: 0 0 auto; }
+  .qb-crumbs::-webkit-scrollbar { display: none; }
 }
 
 /* ---- carousel arrows: smaller on touch screens ------------ */
