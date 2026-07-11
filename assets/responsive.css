@@ -111,6 +111,33 @@ img, svg, video { max-width: 100%; }
     font-size: 13px !important;
     white-space: nowrap;
   }
+
+  /* Notification cards: on a phone the design thumbnail is a narrow left rail,
+     not half the card — shrink the image so the text column gets real room and
+     stops wrapping every word. Scoped to the notification row only. */
+  [style*="min-height: 180px"][style*="border-radius: 24px"] { min-height: 128px !important; }
+  [style*="min-height: 180px"][style*="border-radius: 24px"] > .qb-ph {
+    width: 116px !important;
+    min-width: 116px !important;
+    max-width: 116px !important;
+    border-radius: 18px !important;
+  }
+  [style*="min-height: 180px"][style*="border-radius: 24px"] > [style*="flex: 1 1 0%"] {
+    padding: 10px 6px !important;
+    gap: 12px !important;
+  }
+
+  /* Add-Ad "Select Category" modal: the 3-column miller picker is unusable at
+     phone width — stack the levels into one scrollable full-width column. */
+  [style*="grid-template-columns: 1fr 1fr 1fr"][style*="min-height: 340px"] {
+    grid-template-columns: 1fr !important;
+    max-height: 66vh !important;
+    overflow-y: auto !important;
+  }
+  [style*="grid-template-columns: 1fr 1fr 1fr"][style*="min-height: 340px"] > * {
+    border-right: none !important;
+    border-bottom: 1px solid rgb(237, 237, 237) !important;
+  }
 }
 
 /* ---- carousel arrows: smaller on touch screens ------------ */
