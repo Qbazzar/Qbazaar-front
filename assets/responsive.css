@@ -67,6 +67,10 @@ img, svg, video { max-width: 100%; }
   form[style*="max-width: 1000px"] > :not(:first-child) { display: none !important; }
   form[style*="max-width: 1000px"] > :first-child { width: 100% !important; flex: 1 1 100% !important; }
 
+  /* Companies search: single search field on mobile (Figma). */
+  form[style*="margin-bottom: 40px"] > :not(:first-child) { display: none !important; }
+  form[style*="margin-bottom: 40px"] > :first-child { flex: 1 1 100% !important; border-right: none !important; }
+
   /* Categories: 2-column grid on mobile (Figma mobile) */
   [style*="minmax(300px, 1fr)"] { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
   [style*="minmax(300px, 1fr)"] > * { min-width: 0 !important; }

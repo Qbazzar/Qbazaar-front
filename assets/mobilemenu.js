@@ -76,7 +76,17 @@
     + '.qb-mdrawer-ft a{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;'
     +   'border-radius:12px;background:' + ORANGE + ';color:#fff;text-decoration:none;font:600 15px Poppins}'
     + '@media (max-width:760px){ .qb-burger{display:flex} .qb-hcluster{display:none !important} }'
-    + '@media (min-width:761px){ .qb-menu-open .qb-mdrawer{transform:translateX(-102%)} .qb-menu-open .qb-mdrawer-back{opacity:0;pointer-events:none} }';
+    + '@media (min-width:761px){ .qb-menu-open .qb-mdrawer{transform:translateX(-102%)} .qb-menu-open .qb-mdrawer-back{opacity:0;pointer-events:none} }'
+    + '@media (max-width:600px){'
+    +   'footer .qb-facc{border-bottom:1px solid rgba(0,0,0,.09)}'
+    +   'footer .qb-facc > h3{display:flex;align-items:center;justify-content:space-between;cursor:pointer;'
+    +     'margin:0 !important;padding:15px 2px !important;font-size:16px !important}'
+    +   'footer .qb-facc > h3::after{content:"";width:8px;height:8px;border-right:2px solid #b0b0b0;'
+    +     'border-bottom:2px solid #b0b0b0;transform:rotate(45deg);transition:transform .2s;margin:0 4px 4px 0}'
+    +   'footer .qb-facc.qb-open > h3::after{transform:rotate(-135deg);margin-bottom:0;margin-top:4px}'
+    +   'footer .qb-facc > .qb-flinks{overflow:hidden;max-height:0;transition:max-height .28s ease}'
+    +   'footer .qb-facc.qb-open > .qb-flinks{max-height:640px;padding-bottom:14px}'
+    + '}';
   var st = document.createElement('style'); st.textContent = CSS;
   (document.head || document.documentElement).appendChild(st);
 
@@ -155,7 +165,29 @@
     if (inner && inner.children[1]) inner.children[1].classList.add('qb-hcluster');
   }
 
-  function apply() { tagCluster(); build(); }
+  // Turn the footer's link columns into tap-to-expand accordions on mobile.
+  function footerAcc() {
+    var footer = document.querySelector('footer');
+    if (!footer) return;
+    var heads = footer.querySelectorAll('h3');
+    for (var i = 0; i < heads.length; i++) {
+      var h = heads[i];
+      if (h.__facc) continue;
+      var links = h.nextElementSibling;
+      var col = h.parentElement;
+      if (!links || links.tagName !== 'DIV' || !col) continue;
+      h.__facc = true;
+      col.classList.add('qb-facc');
+      links.classList.add('qb-flinks');
+      (function (col) {
+        h.addEventListener('click', function () {
+          if (window.matchMedia('(max-width: 600px)').matches) col.classList.toggle('qb-open');
+        });
+      })(col);
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); }
 
   function start() {
     apply();
