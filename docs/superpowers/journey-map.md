@@ -10,14 +10,6 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 
 | From | To | D | T | P | Nav types |
 |---|---|---|---|---|---|
-| ?? | Add Ads |  | 1 |  | NAVIGATE |
-| ?? | Language |  | 1 |  | NAVIGATE |
-| ?? | Menu |  | 2 |  | NAVIGATE |
-| ?? | Messages | 12 | 1 |  | NAVIGATE |
-| ?? | Notifications |  | 3 |  | NAVIGATE |
-| ?? | Profile Settings |  | 1 |  | NAVIGATE |
-| ?? | Wishlist | 1 | 1 |  | NAVIGATE |
-| Account Settings | ?? | 47 | 40 | 1 | SWAP_STATE |
 | Account Settings | Add Ads | 7 | 7 |  | NAVIGATE |
 | Account Settings | Language |  | 7 |  | NAVIGATE |
 | Account Settings | Menu |  | 14 |  | NAVIGATE |
@@ -26,15 +18,14 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 | Account Settings | Profile Settings | 14 | 7 |  | NAVIGATE |
 | Account Settings | Wallet | 7 |  |  | NAVIGATE |
 | Account Settings | Wishlist | 7 | 7 |  | NAVIGATE |
-| Account misc | ?? | 3 | 7 |  | SWAP_STATE |
-| Account misc | Add Ads | 7 | 2 |  | NAVIGATE |
-| Account misc | Language |  | 3 |  | NAVIGATE |
-| Account misc | Menu |  | 4 |  | NAVIGATE |
-| Account misc | Messages | 10 | 2 |  | NAVIGATE |
-| Account misc | Notifications | 7 | 6 |  | NAVIGATE |
-| Account misc | Profile Settings | 7 | 2 |  | NAVIGATE |
+| Account misc | Add Ads | 7 | 3 |  | NAVIGATE |
+| Account misc | Language |  | 4 |  | NAVIGATE |
+| Account misc | Menu |  | 6 |  | NAVIGATE |
+| Account misc | Messages | 10 | 3 |  | NAVIGATE |
+| Account misc | Notifications | 7 | 9 |  | NAVIGATE |
+| Account misc | Profile Settings | 7 | 3 |  | NAVIGATE |
 | Account misc | Wallet | 5 |  |  | NAVIGATE |
-| Account misc | Wishlist | 7 | 2 |  | NAVIGATE |
+| Account misc | Wishlist | 7 | 3 |  | NAVIGATE |
 | Add Ads | Language |  | 6 |  | NAVIGATE |
 | Add Ads | Menu |  | 12 |  | NAVIGATE |
 | Add Ads | Messages | 4 |  |  | NAVIGATE |
@@ -44,9 +35,7 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 | Add Ads | Publish Ad | 3 | 4 |  | NAVIGATE |
 | Add Ads | Seller Page | 4 |  |  | NAVIGATE |
 | Add Ads | Wishlist | 4 |  |  | NAVIGATE |
-| Auth | ?? | 1 |  |  | SWAP_STATE |
 | Auth | Home | 3 |  |  | NAVIGATE |
-| Billing Info | ?? | 33 | 21 |  | SWAP_STATE |
 | Billing Info | Account Settings | 5 |  |  | NAVIGATE |
 | Billing Info | Add Ads | 5 | 5 |  | NAVIGATE |
 | Billing Info | Language |  | 5 |  | NAVIGATE |
@@ -72,7 +61,6 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 | Category | Profile Settings | 2 |  |  | NAVIGATE |
 | Category | Sub Category | 2 |  |  | NAVIGATE |
 | Category | Wishlist | 2 |  |  | NAVIGATE |
-| Checkout | ?? |  | 3 |  | SWAP_STATE |
 | Checkout | Add Ads | 4 | 1 |  | NAVIGATE |
 | Checkout | Language |  | 7 |  | NAVIGATE |
 | Checkout | Menu |  | 8 |  | NAVIGATE |
@@ -123,7 +111,6 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 | Make an Offer | Wishlist | 1 |  |  | NAVIGATE |
 | Menu | Add Ads |  | 3 |  | NAVIGATE |
 | Menu | Notifications |  | 2 |  | NAVIGATE |
-| Messages | ?? |  | 3 |  | SWAP_STATE |
 | Messages | Account misc | 2 |  |  | NAVIGATE |
 | Messages | Add Ads | 18 | 1 |  | NAVIGATE |
 | Messages | Category | 6 |  |  | NAVIGATE |
@@ -172,7 +159,6 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 | Product Page | Profile Settings | 2 |  |  | NAVIGATE |
 | Product Page | Seller Page | 2 |  |  | NAVIGATE |
 | Product Page | Wishlist | 2 |  |  | NAVIGATE |
-| Profile Settings | ?? | 76 | 64 | 2 | SWAP_STATE |
 | Profile Settings | Account Settings | 12 |  |  | NAVIGATE |
 | Profile Settings | Account misc | 11 |  |  | NAVIGATE |
 | Profile Settings | Add Ads | 12 | 10 |  | NAVIGATE |
@@ -231,7 +217,6 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 | Sub Category | Product Page | 1 |  |  | NAVIGATE |
 | Sub Category | Profile Settings | 2 |  |  | NAVIGATE |
 | Sub Category | Wishlist | 2 |  |  | NAVIGATE |
-| Wallet | ?? | 7 | 5 |  | SWAP_STATE |
 | Wallet | Account Settings | 1 |  |  | NAVIGATE |
 | Wallet | Account misc | 1 |  |  | NAVIGATE |
 | Wallet | Add Ads | 1 | 2 |  | NAVIGATE |
@@ -257,12 +242,12 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 - **Sub Category** (`parent-category.html`) → Add Ads, Language, Menu, Messages, Notifications, Product Page, Profile Settings, Wishlist
 - **Product Page** (`product.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Seller Page, Wishlist
 - **Buy Now** (`(new)`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Seller Page, Wishlist
-- **Checkout** (`checkout.html`) → ??, Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wishlist
+- **Checkout** (`checkout.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wishlist
 
 ### Offer & chat
 - **Product Page** (`product.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Seller Page, Wishlist
 - **Make an Offer** (`offer.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Seller Page, Wishlist
-- **Messages** (`messages.html`) → ??, Account misc, Add Ads, Category, Language, Menu, Notifications, Profile Settings, Wishlist
+- **Messages** (`messages.html`) → Account misc, Add Ads, Category, Language, Menu, Notifications, Profile Settings, Wishlist
 
 ### Sell an item
 - **Add Ads** (`add-ads.html`) → Language, Menu, Messages, Notifications, Preview Ad, Profile Settings, Publish Ad, Seller Page, Wishlist
@@ -271,15 +256,15 @@ Full node-level edge list: `D:\Doc\q-bazaar-refs\flows.json` (not in repo).
 - **My Ads** (`my-ads.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wishlist
 
 ### Auth
-- **Auth** (`auth.html`) → ??, Home
+- **Auth** (`auth.html`) → Home
 - **Home** (`index.html`) → Add Ads, Auth, Category, Companies, Language, Menu, Messages, My Ads, Notifications, Profile Settings, Sales Overview, Saved Search, Seller Page, Wishlist
 
 ### Account management
-- **Account Settings** (`account.html`) → ??, Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wallet, Wishlist
-- **Profile Settings** (`account.html`) → ??, Account Settings, Account misc, Add Ads, Billing Info, Language, Menu, Messages, Notifications, Wallet, Wishlist
-- **Billing Info** (`account.html`) → ??, Account Settings, Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wallet, Wishlist
+- **Account Settings** (`account.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wallet, Wishlist
+- **Profile Settings** (`account.html`) → Account Settings, Account misc, Add Ads, Billing Info, Language, Menu, Messages, Notifications, Wallet, Wishlist
+- **Billing Info** (`account.html`) → Account Settings, Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wallet, Wishlist
 - **Payment Method** (`payment-method.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Wishlist
-- **Wallet** (`payment-method.html`) → ??, Account Settings, Account misc, Add Ads, Billing Info, Language, Menu, Messages, Notifications, Payment Method, Profile Settings, Wishlist
+- **Wallet** (`payment-method.html`) → Account Settings, Account misc, Add Ads, Billing Info, Language, Menu, Messages, Notifications, Payment Method, Profile Settings, Wishlist
 
 ### Social
 - **Seller Page** (`seller.html`) → Add Ads, Language, Menu, Messages, Notifications, Profile Settings, Search/Filter, Wishlist

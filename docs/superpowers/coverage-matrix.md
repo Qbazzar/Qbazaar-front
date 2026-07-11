@@ -8,15 +8,15 @@ guessed) · **MISSING** = no implementation yet · **REFERENCE** = component /
 flow-annotation frame, implemented only as part of screens · **REVIEW** = needs
 human/PNG review to classify.
 
-**Totals:** COVERED*: 84 · MISSING: 38 · REVIEW: 26 · REFERENCE: 150 · PARTIAL: 187 (of 485)
+**Totals:** COVERED*: 108 · REFERENCE: 172 · MISSING: 14 · PARTIAL: 191 (of 485)
 
 ## Home → `index.html`
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
 | 3:2 | Home Page | D | 1440×3464 | COVERED* |
-| 728:44663 | Home Page | D | 1440×3464 | MISSING |
-| 741:38067 | Home Page - Before Log/Sign | D | 1440×3464 | MISSING |
+| 728:44663 | Home Page | D | 1440×3464 | COVERED* |
+| 741:38067 | Home Page - Before Log/Sign | D | 1440×3464 | COVERED* |
 | 489:16010 | Home Page - Category Option | D | 1440×1024 | COVERED* |
 | 492:18987 | Home Page - Choose Option | D | 1440×1024 | COVERED* |
 | 492:17733 | Home Page - Distance Option | D | 1440×1024 | COVERED* |
@@ -58,7 +58,7 @@ human/PNG review to classify.
 |---|---|---|---|---|
 | 250:4405 | Filiter | D | 1190×1445 | COVERED* |
 | 264:4818 | Filliter Filled & Drop Down | D | 1509×981 | COVERED* |
-| 655:55973 | Search Not Found | D | 1440×2808 | MISSING |
+| 655:55973 | Search Not Found | D | 1440×2808 | COVERED* |
 | 492:20208 | Search Result | D | 1440×2325 | COVERED* |
 | 244:3508 | Filliter Options | T | 744×1274 | PARTIAL |
 | 655:55238 | Search Not Found | T | 744×1965 | PARTIAL |
@@ -79,6 +79,7 @@ human/PNG review to classify.
 | 534:32277 | Ads - org Product Page | T | 744×2227 | PARTIAL |
 | 618:27221 | ads-product-page | P | 390×2549 | PARTIAL |
 | 623:29490 | ads-product-page | P | 390×3587 | PARTIAL |
+| 619:27566 | Normal Size | P | 390×844 | PARTIAL |
 
 ## Buy Now → `(new)`
 
@@ -96,10 +97,10 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 689:33725 | Checkout - Address if he didnt Saved or want edit | D | 1440×1176 | MISSING |
-| 682:32513 | Checkout - Address if he Saved | D | 1440×1024 | MISSING |
-| 684:33194 | Checkout - Complete Done | D | 1440×1024 | MISSING |
-| 689:33489 | Checkout - Error | D | 1440×1024 | MISSING |
+| 689:33725 | Checkout - Address if he didnt Saved or want edit | D | 1440×1176 | COVERED* |
+| 682:32513 | Checkout - Address if he Saved | D | 1440×1024 | COVERED* |
+| 684:33194 | Checkout - Complete Done | D | 1440×1024 | COVERED* |
+| 689:33489 | Checkout - Error | D | 1440×1024 | COVERED* |
 | 710:36152 | Checkout | T | 744×1527 | PARTIAL |
 | 563:28520 | Confirm | T | 744×1133 | PARTIAL |
 | 710:37765 | Done | T | 744×1133 | PARTIAL |
@@ -114,7 +115,7 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 657:57378 | Make an offer | D | 1440×1679 | MISSING |
+| 657:57378 | Make an offer | D | 1440×1679 | COVERED* |
 | 709:32645 | make an offer | T | 744×1705 | PARTIAL |
 | 709:33285 | make-an-offer-mobile | P | 390×1364 | PARTIAL |
 
@@ -124,9 +125,9 @@ human/PNG review to classify.
 |---|---|---|---|---|
 | 370:18776 | Message | D | 1440×1024 | COVERED* |
 | 467:16387 | Message | D | 1440×1024 | COVERED* |
-| 667:30685 | Message -  Buyer | D | 1440×1024 | MISSING |
+| 667:30685 | Message -  Buyer | D | 1440×1024 | COVERED* |
 | 370:17790 | Message -  Report Done | D | 1440×1024 | COVERED* |
-| 667:31850 | Message -  Seller | D | 1440×1024 | MISSING |
+| 667:31850 | Message -  Seller | D | 1440×1024 | COVERED* |
 | 387:8529 | Message -  Upload Photo | D | 1440×1024 | COVERED* |
 | 370:18151 | Message - Block Done | D | 1440×1024 | COVERED* |
 | 365:14788 | Message - Chat | D | 1440×1024 | COVERED* |
@@ -194,7 +195,7 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 518:20536 | My Ads | D | 1440×1939 | MISSING |
+| 518:20536 | My Ads | D | 1440×1939 | COVERED* |
 | 361:9811 | My Ads - Empty Page | D | 1440×1939 | COVERED* |
 | 516:19505 | My Ads | T | 744×2026 | PARTIAL |
 | 516:19325 | My Ads - Empty Page | T | 744×1926 | PARTIAL |
@@ -354,6 +355,8 @@ human/PNG review to classify.
 | 613:29435 | Profile Settings - Add Another or Edit or Delete Address | P | 390×844 | PARTIAL |
 | 613:29001 | Profile Settings - Delivery Address | P | 390×844 | PARTIAL |
 | 613:29086 | Profile Settings - Delivery Address Done | P | 390×844 | PARTIAL |
+| 613:28184 | Setting | P | 390×844 | PARTIAL |
+| 613:28421 | Setting | P | 390×844 | PARTIAL |
 | 613:29656 | Update Photo - Done | P | 390×844 | PARTIAL |
 | 613:29596 | Update Photo - Load | P | 390×844 | PARTIAL |
 
@@ -389,6 +392,7 @@ human/PNG review to classify.
 | 401:10641 | Marketplace Info | D | 1440×1024 | COVERED* |
 | 532:27035 | Confirm Delete | T | 744×1134 | PARTIAL |
 | 563:29920 | Data Protection | T | 744×1133 | PARTIAL |
+| 563:28208 | DeleteAccount | T | 744×1133 | PARTIAL |
 | 563:30518 | Marketplace Info | T | 744×1133 | PARTIAL |
 | 616:26678 | Confirm Delet | P | 390×844 | PARTIAL |
 | 614:28775 | Data Protection | P | 390×844 | PARTIAL |
@@ -399,8 +403,8 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 504:25438 | Payment Method | D | 1440×1181 | MISSING |
-| 502:21900 | Payment Method | D | 1440×1203 | MISSING |
+| 504:25438 | Payment Method | D | 1440×1181 | COVERED* |
+| 502:21900 | Payment Method | D | 1440×1203 | COVERED* |
 | 573:34759 | Payment Method | T | 744×1686 | PARTIAL |
 | 603:31189 | Payment Method | P | 390×1380 | PARTIAL |
 | 613:32185 | Payment Method | P | 390×871 | PARTIAL |
@@ -409,7 +413,7 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 502:22401 | Wallet | D | 1440×1024 | MISSING |
+| 502:22401 | Wallet | D | 1440×1024 | COVERED* |
 | 563:31406 | Wallet | T | 744×1133 | PARTIAL |
 | 569:32222 | Wallet | T | 744×1133 | PARTIAL |
 | 613:31879 | Walet | P | 390×899 | PARTIAL |
@@ -418,7 +422,7 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 502:21437 | Sales Overview | D | 1440×1662 | MISSING |
+| 502:21437 | Sales Overview | D | 1440×1662 | COVERED* |
 | 573:33241 | Sales Ovreview | T | 744×1468 | PARTIAL |
 | 600:30639 | Sales Overview | P | 390×1316 | PARTIAL |
 
@@ -432,15 +436,15 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
-| 741:37607 | Enter Code | D | 1440×1024 | MISSING |
-| 741:37200 | Enter Number | D | 1440×1024 | MISSING |
-| 739:36152 | Forget Pass - Send Code | D | 1440×1024 | MISSING |
-| 736:65208 | Login | D | 1440×1024 | MISSING |
-| 745:38739 | New Pass | D | 1440×1024 | MISSING |
-| 739:36548 | Send Code | D | 1440×1024 | MISSING |
-| 741:36327 | Signup | D | 1440×1024 | MISSING |
-| 741:36808 | Verify | D | 1440×1024 | MISSING |
-| 736:66642 | Verify Identity | D | 1440×1024 | MISSING |
+| 741:37607 | Enter Code | D | 1440×1024 | COVERED* |
+| 741:37200 | Enter Number | D | 1440×1024 | COVERED* |
+| 739:36152 | Forget Pass - Send Code | D | 1440×1024 | COVERED* |
+| 736:65208 | Login | D | 1440×1024 | COVERED* |
+| 745:38739 | New Pass | D | 1440×1024 | COVERED* |
+| 739:36548 | Send Code | D | 1440×1024 | COVERED* |
+| 741:36327 | Signup | D | 1440×1024 | COVERED* |
+| 741:36808 | Verify | D | 1440×1024 | COVERED* |
+| 736:66642 | Verify Identity | D | 1440×1024 | COVERED* |
 | 779:39915 | change password | T | 744×1133 | PARTIAL |
 | 779:40163 | check email | T | 744×1133 | PARTIAL |
 | 779:39974 | login | T | 744×1133 | PARTIAL |
@@ -474,41 +478,27 @@ human/PNG review to classify.
 |---|---|---|---|---|
 | 125:1208 | طلب تامين بدون التزام | D | 1440×1955 | MISSING |
 
-## ?? → `(unmapped)`
-
-| Frame | Name | Device | Size | Status |
-|---|---|---|---|---|
-| 435:11949 | Component 111 | D | 1446×652 | REVIEW |
-| 288:10120 | Component 95 | D | 1331×1039 | REVIEW |
-| 288:11119 | Component 97 | D | 1331×1058 | REVIEW |
-| 516:19312 | Frame 1984081696 | D | 16940×757 | REVIEW |
-| 435:15284 | Frame 1984081753 | D | 3136×681 | REVIEW |
-| 442:14485 | Frame 1984081757 | D | 3513×801 | REVIEW |
-| 442:15291 | Frame 1984081763 | D | 2664×1008 | REVIEW |
-| 451:14310 | Frame 1984081765 | D | 2828×1126 | REVIEW |
-| 516:19315 | Frame 1984081766 | D | 11049×757 | REVIEW |
-| 569:32636 | Frame 1984081767 | D | 8614×757 | REVIEW |
-| 680:32468 | Frame 1984082135 | D | 1358×1767 | REVIEW |
-| 295:5719 | Load More Sec | D | 1900×1882 | REVIEW |
-| 205:6719 | Profile Card | D | 1188×698 | REVIEW |
-| 427:11264 | Sec Clean up | D | 2839×621 | REVIEW |
-| 563:28208 | DeleteAccount | T | 744×1133 | REVIEW |
-| 357:8170 | Image State | T | 868×819 | REVIEW |
-| 532:24181 | Image State | T | 868×819 | REVIEW |
-| 640:38485 | Image State | T | 868×819 | REVIEW |
-| 324:12916 | NO OPTION CHOICE | T | 798×607 | REVIEW |
-| 256:4962 | Component 57 | P | 472×502 | REVIEW |
-| 638:35827 | No Option Choice | P | 358×763 | REVIEW |
-| 619:27566 | Normal Size | P | 390×844 | REVIEW |
-| 516:19309 | Rectangle 34626042 | P | 358×54706 | REVIEW |
-| 569:32634 | Rectangle 34626043 | P | 358×54706 | REVIEW |
-| 613:28184 | Setting | P | 390×844 | REVIEW |
-| 613:28421 | Setting | P | 390×844 | REVIEW |
-
 ## components → `(component)`
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
+| 435:11949 | Component 111 | D | 1446×652 | REFERENCE |
+| 288:10120 | Component 95 | D | 1331×1039 | REFERENCE |
+| 288:11119 | Component 97 | D | 1331×1058 | REFERENCE |
+| 435:15284 | Frame 1984081753 | D | 3136×681 | REFERENCE |
+| 442:14485 | Frame 1984081757 | D | 3513×801 | REFERENCE |
+| 442:15291 | Frame 1984081763 | D | 2664×1008 | REFERENCE |
+| 451:14310 | Frame 1984081765 | D | 2828×1126 | REFERENCE |
+| 680:32468 | Frame 1984082135 | D | 1358×1767 | REFERENCE |
+| 295:5719 | Load More Sec | D | 1900×1882 | REFERENCE |
+| 205:6719 | Profile Card | D | 1188×698 | REFERENCE |
+| 427:11264 | Sec Clean up | D | 2839×621 | REFERENCE |
+| 357:8170 | Image State | T | 868×819 | REFERENCE |
+| 532:24181 | Image State | T | 868×819 | REFERENCE |
+| 640:38485 | Image State | T | 868×819 | REFERENCE |
+| 324:12916 | NO OPTION CHOICE | T | 798×607 | REFERENCE |
+| 256:4962 | Component 57 | P | 472×502 | REFERENCE |
+| 638:35827 | No Option Choice | P | 358×763 | REFERENCE |
 | 288:9635 | Arrow | S | 233×160 | REFERENCE |
 | 427:10795 | Avatar | S | 170×97 | REFERENCE |
 | 295:4665 | Bttn Load | S | 592×77 | REFERENCE |
@@ -667,6 +657,11 @@ human/PNG review to classify.
 
 | Frame | Name | Device | Size | Status |
 |---|---|---|---|---|
+| 516:19312 | Frame 1984081696 | D | 16940×757 | REFERENCE |
+| 516:19315 | Frame 1984081766 | D | 11049×757 | REFERENCE |
+| 569:32636 | Frame 1984081767 | D | 8614×757 | REFERENCE |
 | 283:8364 | توضيح بس تطبيق الفلترة | D | 1440×2443 | REFERENCE |
 | 298:10089 | توضيح حالة ال Load | D | 1440×3085 | REFERENCE |
+| 516:19309 | Rectangle 34626042 | P | 358×54706 | REFERENCE |
+| 569:32634 | Rectangle 34626043 | P | 358×54706 | REFERENCE |
 
