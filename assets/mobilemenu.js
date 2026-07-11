@@ -94,25 +94,25 @@
     +   'footer [style*="border-top: 1px solid rgb(212, 212, 212)"]{flex-direction:column !important;'
     +     'align-items:center !important;text-align:center;gap:12px !important;justify-content:center !important}'
     + '}'
-    /* ---- Category listings filter -> slide-up bottom sheet on mobile ---- */
-    + '.qb-sheet-hd{display:none}.qb-sheet-apply{display:none}'
+    /* ---- Category listings filter -> slide-up bottom sheet on mobile ----
+       The sidebar is styled purely by attribute selector (no class injected into
+       the engine-managed DOM). The backdrop + "Show Results" bar live on <body>
+       and are created once. `qb-sheet-ready` gates the fixed positioning so the
+       filters stay inline (usable) if the script never runs. */
+    + '.qb-sheet-back,.qb-sheet-apply{display:none}'
     + '@media (max-width:600px){'
-    +   'body.qb-sheet-open{overflow:hidden}'
-    +   'aside.qb-filter-aside{position:fixed !important;left:0 !important;right:0 !important;bottom:0 !important;top:auto !important;'
-    +     'width:100% !important;max-width:100% !important;min-width:0 !important;margin:0 !important;z-index:99992;'
-    +     'max-height:86vh;overflow-y:auto;border-radius:22px 22px 0 0 !important;transform:translateY(103%);'
-    +     'transition:transform .34s cubic-bezier(.4,0,.2,1);box-shadow:0 -10px 44px rgba(0,0,0,.22) !important}'
-    +   '.qb-sheet-open aside.qb-filter-aside{transform:translateY(0)}'
-    +   '.qb-sheet-hd{display:block;position:sticky;top:0;background:#fff;padding:4px 0 12px;z-index:3;margin:-8px 0 4px}'
-    +   '.qb-sheet-grabbar{width:44px;height:5px;border-radius:3px;background:rgb(224,224,224);margin:2px auto 14px}'
-    +   '.qb-sheet-hrow{display:flex;align-items:center;justify-content:space-between}'
-    +   '.qb-sheet-hrow strong{font:600 19px Poppins;color:rgb(33,33,33)}'
-    +   '.qb-sheet-x{width:34px;height:34px;border-radius:50%;border:1px solid rgb(237,237,237);background:#fff;cursor:pointer;'
-    +     'font-size:19px;line-height:1;color:#555;display:flex;align-items:center;justify-content:center}'
-    +   '.qb-sheet-back{position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:99991;opacity:0;pointer-events:none;transition:opacity .25s}'
+    +   'body.qb-sheet-ready aside[style*="min-width: 260px"]{position:fixed !important;left:0 !important;right:0 !important;'
+    +     'bottom:0 !important;top:auto !important;width:100% !important;max-width:100% !important;min-width:0 !important;'
+    +     'margin:0 !important;z-index:99992;max-height:86vh;overflow-y:auto;border-radius:22px 22px 0 0 !important;'
+    +     'transform:translateY(106%);transition:transform .34s cubic-bezier(.4,0,.2,1);box-shadow:0 -10px 44px rgba(0,0,0,.22) !important}'
+    +   'body.qb-sheet-ready.qb-sheet-open{overflow:hidden}'
+    +   'body.qb-sheet-ready.qb-sheet-open aside[style*="min-width: 260px"]{transform:translateY(0);padding-bottom:80px !important}'
+    +   '.qb-sheet-back{display:block;position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:99991;opacity:0;'
+    +     'pointer-events:none;transition:opacity .25s}'
     +   '.qb-sheet-open .qb-sheet-back{opacity:1;pointer-events:auto}'
-    +   '.qb-sheet-apply{display:block;position:sticky;bottom:0;margin:18px 0 -8px;width:100%;padding:15px;border:0;border-radius:12px;'
+    +   '.qb-sheet-apply{display:none;position:fixed;left:0;right:0;bottom:0;z-index:99994;margin:0;padding:16px;border:0;'
     +     'background:' + ORANGE + ';color:#fff;font:600 15px Poppins;cursor:pointer}'
+    +   '.qb-sheet-open .qb-sheet-apply{display:block}'
     +   '.qb-filter-btn{display:inline-flex !important;align-items:center;gap:8px;padding:10px 18px !important;'
     +     'border:1px solid rgb(237,237,237) !important;border-radius:10px !important;background:#fff !important;'
     +     'color:rgb(51,51,51) !important;font-weight:600 !important;box-shadow:0 2px 8px rgba(0,0,0,.05);white-space:nowrap}'
@@ -222,64 +222,69 @@
 
   function openSheet() { document.body.classList.add('qb-sheet-open'); }
   function closeSheet() { document.body.classList.remove('qb-sheet-open'); }
+  function isPhone() { return window.matchMedia('(max-width: 600px)').matches; }
 
-  // On a phone the filter sidebar becomes a slide-up bottom sheet opened by the
-  // (previously inert) "Filter" button; on desktop it stays the inline sidebar.
-  function filterSheet() {
-    var asides = document.querySelectorAll('aside');
-    var aside = null;
-    for (var a = 0; a < asides.length; a++) {
-      if (/min-width:\s*260px/.test(asides[a].getAttribute('style') || '')) { aside = asides[a]; break; }
-    }
-    // find the listings-header "Filter" button (span whose row is space-between)
-    var fbtn = null, nodes = document.querySelectorAll('header ~ * span, main span, section span, span');
-    for (var i = 0; i < nodes.length; i++) {
-      var n = nodes[i];
-      if (n.children.length === 0 && n.textContent.trim() === 'Filter') {
-        var p = n.parentElement;
-        if (p && /space-between/.test(p.getAttribute('style') || '')) { fbtn = n; break; }
-        if (!fbtn) fbtn = n;
+  // One-time wiring for the mobile filter sheet. Deliberately touches ONLY <body>
+  // (never the engine-managed sidebar), so it can't fight the engine's re-renders
+  // and trigger an observe -> re-render -> observe freeze. The sidebar itself is
+  // turned into a sheet purely by CSS attribute selector.
+  var sheetReady = false;
+  function setupSheet() {
+    if (sheetReady) return;
+    sheetReady = true;
+    var back = document.createElement('div');
+    back.className = 'qb-sheet-back';
+    back.addEventListener('click', closeSheet);
+    var apply2 = document.createElement('button');
+    apply2.type = 'button'; apply2.className = 'qb-sheet-apply'; apply2.textContent = 'Show Results';
+    apply2.addEventListener('click', closeSheet);
+    document.body.appendChild(back);
+    document.body.appendChild(apply2);
+    // Open when the (otherwise inert) "Filter" button is tapped — via delegation,
+    // so no per-element wiring and nothing to re-attach after a re-render.
+    document.addEventListener('click', function (e) {
+      if (!isPhone()) return;
+      var el = e.target;
+      for (var i = 0; i < 3 && el; i++) {
+        if (el.nodeType === 1) {
+          if (el.classList && el.classList.contains('qb-filter-btn')) { openSheet(); return; }
+          if (el.children.length === 0 && (el.textContent || '').trim() === 'Filter') {
+            var p = el.parentElement;
+            if (p && /space-between/.test(p.getAttribute('style') || '')) { openSheet(); return; }
+          }
+        }
+        el = el.parentElement;
       }
-    }
-    if (!aside || !fbtn) return;
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+    document.body.classList.add('qb-sheet-ready');
+  }
 
-    aside.classList.add('qb-filter-aside');
-    if (!aside.querySelector('.qb-sheet-hd')) {
-      var hd = document.createElement('div');
-      hd.className = 'qb-sheet-hd';
-      hd.innerHTML = '<div class="qb-sheet-grabbar"></div><div class="qb-sheet-hrow"><strong>Filters</strong>'
-        + '<button class="qb-sheet-x" aria-label="Close">&times;</button></div>';
-      aside.insertBefore(hd, aside.firstChild);
-      hd.querySelector('.qb-sheet-x').addEventListener('click', closeSheet);
-    }
-    if (!aside.querySelector('.qb-sheet-apply')) {
-      var ap = document.createElement('button');
-      ap.className = 'qb-sheet-apply'; ap.type = 'button'; ap.textContent = 'Show Results';
-      ap.addEventListener('click', closeSheet);
-      aside.appendChild(ap);
-    }
-    if (!document.querySelector('.qb-sheet-back')) {
-      var back = document.createElement('div');
-      back.className = 'qb-sheet-back';
-      back.addEventListener('click', closeSheet);
-      document.body.appendChild(back);
-    }
-    if (!fbtn.__sheetWired) {
-      fbtn.__sheetWired = true;
-      fbtn.classList.add('qb-filter-btn');
-      if (fbtn.textContent.trim() === 'Filter') fbtn.innerHTML = FUNNEL + '<span>Filter</span>';
-      fbtn.addEventListener('click', function (e) {
-        if (window.matchMedia('(max-width: 600px)').matches) { e.stopPropagation(); openSheet(); }
-      });
+  // Cosmetic only: give the "Filter" button a pill + funnel icon on phones.
+  // Runs on a few timers (never inside the observer), so it can't loop.
+  function markFilterBtn() {
+    if (!isPhone()) return;
+    var spans = document.querySelectorAll('span, button');
+    for (var i = 0; i < spans.length; i++) {
+      var n = spans[i];
+      if (n.children.length === 0 && (n.textContent || '').trim() === 'Filter') {
+        var p = n.parentElement;
+        if (p && /space-between/.test(p.getAttribute('style') || '')) {
+          if (!n.classList.contains('qb-filter-btn')) { n.classList.add('qb-filter-btn'); n.innerHTML = FUNNEL + '<span>Filter</span>'; }
+          return;
+        }
+      }
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); filterSheet(); }
+  function apply() { tagCluster(); build(); footerAcc(); }
 
   function start() {
     apply();
+    setupSheet();
     new MutationObserver(function () { apply(); }).observe(document.body, { childList: true, subtree: true });
     [200, 600, 1200].forEach(function (t) { setTimeout(apply, t); });
+    [350, 1000, 2000].forEach(function (t) { setTimeout(markFilterBtn, t); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
