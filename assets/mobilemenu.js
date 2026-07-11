@@ -78,7 +78,8 @@
     + '@media (max-width:760px){ .qb-burger{display:flex} .qb-hcluster{display:none !important} }'
     + '@media (min-width:761px){ .qb-menu-open .qb-mdrawer{transform:translateX(-102%)} .qb-menu-open .qb-mdrawer-back{opacity:0;pointer-events:none} }'
     + '@media (max-width:600px){'
-    +   'footer .qb-facc{border-bottom:1px solid rgba(0,0,0,.09)}'
+    +   'footer .qb-fcols{flex-direction:column !important;gap:0 !important;flex-wrap:nowrap !important}'
+    +   'footer .qb-facc{flex:1 1 100% !important;width:100% !important;border-bottom:1px solid rgba(0,0,0,.09)}'
     +   'footer .qb-facc:first-of-type{border-top:1px solid rgba(0,0,0,.09)}'
     +   'footer .qb-facc > h3{display:flex !important;align-items:center;justify-content:space-between;cursor:pointer;'
     +     'margin:0 !important;padding:16px 2px !important;font-size:16px !important;font-weight:600 !important}'
@@ -179,6 +180,7 @@
       if (!links || links.tagName !== 'DIV' || !col) continue;
       h.__facc = true;
       col.classList.add('qb-facc');
+      if (col.parentElement) col.parentElement.classList.add('qb-fcols');
       links.classList.add('qb-flinks');
       (function (col) {
         h.addEventListener('click', function () {
