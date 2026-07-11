@@ -93,6 +93,16 @@ img, svg, video { max-width: 100%; }
   }
   .qb-crumbs > * { white-space: nowrap; flex: 0 0 auto; }
   .qb-crumbs::-webkit-scrollbar { display: none; }
+
+  /* Seller / Organization tabs (Ads (8,429) | About us | Legal Info): compact
+     so all three fit one phone row instead of wrapping/overflowing. */
+  [style*="flex: 1 1 120px"][style*="border-radius: 10px"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding: 11px 6px !important;
+    font-size: 13px !important;
+    white-space: nowrap;
+  }
 }
 
 /* ---- carousel arrows: smaller on touch screens ------------ */
