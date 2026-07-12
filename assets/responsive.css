@@ -227,8 +227,8 @@ img, svg, video { max-width: 100%; }
   }
 }
 
-/* ---- sales table: swipeable inside its card on phones ------ */
-@media (max-width: 600px) {
+/* ---- sales table: swipeable inside its card below desktop --- */
+@media (max-width: 1000px) {
   html[data-screen="salesOverview"] :has(> [style*="2fr 1.2fr 1.2fr 1fr 0.9fr"]) {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -236,6 +236,20 @@ img, svg, video { max-width: 100%; }
   html[data-screen="salesOverview"] [style*="2fr 1.2fr 1.2fr 1fr 0.9fr"] {
     min-width: 640px;
   }
+  /* stat summary cards stack cleanly */
+  html[data-screen="salesOverview"] [style*="minmax(200px, 1fr)"],
+  html[data-screen="salesOverview"] [style*="minmax(220px, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* ---- seller hero: compact stacked layout on phones ---------- */
+@media (max-width: 600px) {
+  .qb-scover { height: 140px !important; }
+  .qb-savatar { width: 76px !important; height: 76px !important; font-size: 20px !important; margin-top: -50px !important; }
+  :has(> .qb-savatar) { flex-wrap: wrap !important; row-gap: 10px; }
+  .qb-sstats { flex-basis: 100%; font-size: 13.5px !important; }
 }
 
 /* ---- carousel arrows: smaller on touch screens ------------ */

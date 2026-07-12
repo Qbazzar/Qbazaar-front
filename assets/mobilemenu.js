@@ -460,7 +460,37 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); }
+  // Chat "..." menu: the engine uses emoji glyphs; the design uses vuesax
+  // line icons. Swap them (stroke:currentColor keeps Block User red).
+  var CHATICONS = {
+    'View Ad': '<circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/>',
+    'Report User': '<path d="M5 21V4"/><path d="M5 4c4-2.5 8 2.5 14 .5V15c-6 2-10-3-14-.5"/>',
+    'Delete Conversation': '<path d="M4 6h16M9 6V4h6v2M6 6l1 14h10l1-14"/><path d="M10 10v6M14 10v6"/>',
+    'Block User': '<circle cx="12" cy="12" r="9"/><path d="M5.7 5.7l12.6 12.6"/>'
+  };
+  function chatMenuIcons() {
+    if ((window.__QB_SCREEN || '') !== 'messages') return;
+    var els = document.querySelectorAll('div, span, button, a');
+    for (var i = 0; i < els.length; i++) {
+      var e = els[i];
+      if (e.children.length !== 0 || e.dataset.qbCmi) continue; // text leaves only
+      if (e.closest && e.closest('[data-qb-cmi]')) continue;    // never re-swap our own span
+      var t = (e.textContent || '').trim();
+      if (t.length < 6 || t.length > 26) continue;
+      var m = /(View Ad|Report User|Delete Conversation|Block User)$/.exec(t);
+      if (!m) continue;
+      if (t === m[1]) continue; // already emoji-free (our span or clean label)
+      e.dataset.qbCmi = '1';
+      var label = m[1];
+      e.textContent = '';
+      e.style.display = 'flex'; e.style.alignItems = 'center'; e.style.gap = '10px';
+      e.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+        + 'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto">'
+        + CHATICONS[label] + '</svg><span>' + label + '</span>';
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); }
 
   function start() {
     apply();
