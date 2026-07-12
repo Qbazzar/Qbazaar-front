@@ -1,5 +1,5 @@
-/* ============================================================
-   Q Bazaar — responsive layer + button normalisation.
+﻿/* ============================================================
+   Q Bazaar â€” responsive layer + button normalisation.
    Loaded AFTER styles.css so it can refine the captured design.
    The base design already flex-wraps; this file tightens buttons,
    guards against horizontal overflow, restacks the absolutely-
@@ -47,7 +47,7 @@ img, svg, video { max-width: 100%; }
     flex-direction: column;
     gap: 26px !important;
   }
-  /* in a column the children's flex-basis would become height — neutralise */
+  /* in a column the children's flex-basis would become height â€” neutralise */
   footer [style*="gap: 40px"][style*="space-between"] > * {
     flex: 0 0 auto !important;
     max-width: none !important;
@@ -60,7 +60,7 @@ img, svg, video { max-width: 100%; }
   main, section { min-width: 0; }
 }
 @media (min-width: 601px) and (max-width: 1000px) {
-  /* Home hero search: one pill row — fields + orange Search button inline */
+  /* Home hero search: one pill row â€” fields + orange Search button inline */
   form[style*="max-width: 1000px"] { flex-wrap: nowrap !important; padding: 6px 6px 6px 10px !important; }
   form[style*="max-width: 1000px"] > * { min-width: 0 !important; }
   form[style*="max-width: 1000px"] .qb-btn,
@@ -166,7 +166,7 @@ img, svg, video { max-width: 100%; }
   [style*="minmax(200px, 1fr)"] { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
   [style*="minmax(200px, 1fr)"] > * { min-width: 0 !important; }
 
-  /* Notification filter tabs (All / Price Change / Unread / …): compact pills
+  /* Notification filter tabs (All / Price Change / Unread / â€¦): compact pills
      in a single horizontally-scrollable row instead of wrapping. */
   [style*="border-radius: 40px"] { padding: 9px 16px !important; font-size: 13.5px !important; white-space: nowrap; }
   :has(> [style*="border-radius: 40px"]) {
@@ -200,7 +200,7 @@ img, svg, video { max-width: 100%; }
   }
 
   /* Notification cards: on a phone the design thumbnail is a narrow left rail,
-     not half the card — shrink the image so the text column gets real room and
+     not half the card â€” shrink the image so the text column gets real room and
      stops wrapping every word. Scoped to the notification row only. */
   [style*="min-height: 180px"][style*="border-radius: 24px"] { min-height: 128px !important; }
   [style*="min-height: 180px"][style*="border-radius: 24px"] > .qb-ph {
@@ -215,7 +215,7 @@ img, svg, video { max-width: 100%; }
   }
 
   /* Add-Ad "Select Category" modal: the 3-column miller picker is unusable at
-     phone width — stack the levels into one scrollable full-width column. */
+     phone width â€” stack the levels into one scrollable full-width column. */
   [style*="grid-template-columns: 1fr 1fr 1fr"][style*="min-height: 340px"] {
     grid-template-columns: 1fr !important;
     max-height: 66vh !important;
@@ -244,6 +244,50 @@ img, svg, video { max-width: 100%; }
   }
 }
 
+/* ---- parent category on phones (Figma 623:28688): each section is a
+   horizontal swipeable 2-up card row; categories grid is 2-col ---------- */
+@media (max-width: 600px) {
+  html[data-screen="catParent"] [style*="flex-wrap: wrap"][style*="gap: 12px"]:has(> .qb-card) {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 6px;
+  }
+  html[data-screen="catParent"] [style*="flex-wrap: wrap"][style*="gap: 12px"] > .qb-card {
+    flex: 0 0 72% !important;
+    min-width: 0 !important;
+    scroll-snap-align: start;
+  }
+  html[data-screen="catParent"] [style*="minmax(220px, 1fr)"]:has(> .qb-card) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    gap: 12px !important;
+    padding-bottom: 6px;
+  }
+  html[data-screen="catParent"] [style*="minmax(220px, 1fr)"]:has(> .qb-card) > .qb-card {
+    flex: 0 0 72% !important;
+    min-width: 0 !important;
+    scroll-snap-align: start;
+  }
+  html[data-screen="catParent"] .qb-catgrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+    scroll-snap-type: none !important;
+  }
+  html[data-screen="catParent"] .qb-catgrid > * {
+    flex: none !important;
+    min-width: 0 !important;
+  }
+}
+
 /* ---- seller hero: compact stacked layout on phones ---------- */
 @media (max-width: 600px) {
   .qb-scover { height: 140px !important; }
@@ -258,3 +302,4 @@ img, svg, video { max-width: 100%; }
   .qb-slide-prev { left: 0; }
   .qb-slide-next { right: 0; }
 }
+

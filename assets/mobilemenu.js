@@ -565,7 +565,24 @@
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeCardSheet(); });
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); }
+  // Parent-category: tag the small "Categories" grid (sits above View More)
+  // so phone CSS can keep it a 2-col grid while product rows become sliders
+  function tagCatGrid() {
+    if ((window.__QB_SCREEN || '') !== 'catParent') return;
+    if (document.querySelector('.qb-catgrid')) return;
+    var vm = [].find.call(document.querySelectorAll('*'), function (e) {
+      return e.childElementCount <= 1 && /^(View More|Show All)$/.test((e.textContent || '').trim());
+    });
+    if (!vm) return;
+    var sec = vm.parentElement;
+    for (var i = 0; i < 5 && sec; i++) {
+      var grid = sec.querySelector('[style*="minmax(220px, 1fr)"]');
+      if (grid) { grid.classList.add('qb-catgrid'); return; }
+      sec = sec.parentElement;
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); }
 
   function start() {
     apply();
