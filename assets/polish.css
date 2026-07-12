@@ -1,0 +1,44 @@
+/* ============================================================
+   Q Bazaar — polish layer: shadows, hovers, micro-interactions.
+   Values come from the Figma file's own tokens:
+   - canonical card shadow  0 4px 40px rgba(161,161,161,.15)  (2,212 uses)
+   - secondary shadows      0 4px 30px rgba(161,161,161,.20),
+                            0 4px 25px rgba(188,188,188,.10)
+   - hover language: rows white -> #f4f4f4/#fafafa, icons -> orange
+     (header icons already inherit .qb-nav:hover color), no shadow
+     change on hover (verified against the file's variant diffs).
+   NOTE: attribute selectors must use the browser-normalised inline
+   style serialisation: colour-first shadows, spaced rgb(). */
+
+/* ---- smooth micro-interactions ---------------------------- */
+.qb-btn, .qb-card, .qb-nav, .qb-filter-btn,
+button[style*="background: rgb(243, 128, 87)"] {
+  transition: background-color .18s ease, color .18s ease, box-shadow .2s ease,
+    transform .2s ease, border-color .18s ease, filter .18s ease;
+}
+
+/* ---- primary (orange) buttons: darker on hover ------------- */
+button[style*="background: rgb(243, 128, 87)"]:hover,
+.qb-btn[style*="background: rgb(243, 128, 87)"]:hover {
+  background: rgb(233, 108, 63) !important;
+  filter: none !important;
+}
+
+/* ---- pills / secondary buttons ----------------------------- */
+.qb-filter-btn:hover { background: rgb(250, 250, 250) !important; }
+
+/* ---- shadow normalisation to the design tokens ------------- */
+[style*="box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px"] {
+  box-shadow: 0 4px 25px rgba(188, 188, 188, .10) !important;
+}
+[style*="box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px"] {
+  box-shadow: 0 4px 30px rgba(161, 161, 161, .20) !important;
+}
+[style*="box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 4px"] {
+  box-shadow: 0 4px 25px rgba(188, 188, 188, .10) !important;
+}
+
+/* ---- card hover: same design family, one step stronger ----- */
+.qb-card:hover {
+  box-shadow: 0 4px 40px rgba(161, 161, 161, .25);
+}
