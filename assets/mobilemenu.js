@@ -24,7 +24,7 @@
     ['Notifications', 'notifications.html', I.bell],
     ['Saved Search', 'saved-search.html', I.search], ['My Ads', 'my-ads.html', I.tag],
     ['Sales Overview', 'sales-overview.html', I.chart], ['Account Settings', 'account.html', I.gear],
-    ['Wallet', 'account.html', I.wallet], ['Log Out', 'auth.html', I.out]
+    ['Wallet', 'account.html', I.wallet], ['Log Out', 'login.html', I.out]
   ];
   var ORANGE = 'rgb(243,128,87)';
 

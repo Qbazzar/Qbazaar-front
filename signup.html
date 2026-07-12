@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q Bazaar — Create an account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/auth.css?v=1">
+</head>
+<body>
+<header class="qb-ahead">
+  <a href="index.html"><img src="assets/qb-logo.png" alt="Q Bazaar"></a>
+  <button type="button" class="qb-lang"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>EN <span style="color:#c2c2c2">▾</span></button>
+</header>
+<main>
+  <div class="qb-card">
+    <h1>Create an account</h1>
+    <p class="qb-sub">Join Bazaar to buy and sell locally.</p>
+
+    <form action="signup-verify.html" method="get">
+      <p class="qb-sec">How would you like to use classifieds?</p>
+      <div class="qb-radios">
+        <label><input type="radio" name="acct" checked> Private</label>
+        <label><input type="radio" name="acct"> Commercial</label>
+      </div>
+
+      <p class="qb-sec">Your login details</p>
+      <div class="qb-field">
+        <label>Email <b>*</b></label>
+        <input type="email" placeholder="example@gmail.com" required>
+      </div>
+      <div class="qb-field">
+        <label>Password <b>*</b></label>
+        <div class="qb-inwrap">
+          <input type="password" id="pw" placeholder="********" required>
+          <button type="button" class="qb-eye" data-eye="pw"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></svg></button>
+        </div>
+      </div>
+
+      <p class="qb-note">Our Terms of Use apply. Information on processing can be found in<br>our <a href="#">Privacy Policy</a>.</p>
+      <button type="submit" class="qb-btn">Register For Free</button>
+    </form>
+
+    <p class="qb-foot"><a class="qb-link red" href="login.html">You already have an account? <u>Login</u></a></p>
+  </div>
+</main>
+<script src="assets/auth.js?v=1"></script>
+</body>
+</html>

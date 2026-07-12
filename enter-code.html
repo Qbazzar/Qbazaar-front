@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q Bazaar — Enter Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/auth.css?v=1">
+</head>
+<body>
+<header class="qb-ahead">
+  <a href="index.html"><img src="assets/qb-logo.png" alt="Q Bazaar"></a>
+  <button type="button" class="qb-lang"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>EN <span style="color:#c2c2c2">▾</span></button>
+</header>
+<main>
+  <div class="qb-card center">
+    <h1>Verify Your Identity</h1>
+    <p class="qb-sub">We've sent a verification code to +974 ••• ••45 <a class="edit" href="enter-number.html">Edit</a><br>Enter the code below to continue.</p>
+    <form action="index.html" method="get">
+      <div class="qb-otp">
+        <input inputmode="numeric" placeholder="0"><input inputmode="numeric" placeholder="0"><input inputmode="numeric" placeholder="0"><input inputmode="numeric" placeholder="0"><input inputmode="numeric" placeholder="0"><input inputmode="numeric" placeholder="0">
+      </div>
+      <p class="qb-resend" style="text-align:left">You haven't received any code? <a href="#"><u>Resend</u></a></p>
+      <button type="submit" class="qb-btn" style="max-width:420px;margin:30px auto 0">Verify</button>
+    </form>
+  </div>
+</main>
+<script src="assets/auth.js?v=1"></script>
+</body>
+</html>
