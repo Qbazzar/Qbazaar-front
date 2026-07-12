@@ -38,8 +38,32 @@
     document.querySelectorAll('.qb-ddpanel').forEach(function (p) { p.remove(); });
     document.querySelectorAll('.qb-ddopen').forEach(function (c) { c.classList.remove('qb-ddopen'); });
   }
+  /* The engine rebuilds its DOM on interaction: element listeners are lost
+     (attributes survive). So controls are TAG-ONLY (data-qbsel) and all
+     behaviour lives in one delegated listener; panels are portaled to <body>
+     so re-renders can't destroy them. */
+  function portal(ctrl) {
+    var r = ctrl.getBoundingClientRect();
+    var p = document.createElement('div');
+    p.className = 'qb-ddpanel';
+    p.style.left = (r.left + window.pageXOffset) + 'px';
+    p.style.top = (r.bottom + window.pageYOffset + 14) + 'px';
+    p.style.minWidth = Math.max(190, r.width) + 'px';
+    document.body.appendChild(p);
+    return p;
+  }
   document.addEventListener('click', function (e) {
-    if (!e.target.closest('.qb-ddwrap')) closeAll();
+    if (e.target.closest && e.target.closest('.qb-ddpanel')) return; // items handle themselves
+    var ctrl = e.target.closest && e.target.closest('[data-qbsel]');
+    if (!ctrl) { closeAll(); return; }
+    var kind = ctrl.dataset.qbsel;
+    var open = ctrl.classList.contains('qb-ddopen');
+    closeAll();
+    if (open) return;
+    ctrl.classList.add('qb-ddopen');
+    if (kind === 'cat') openCategory(ctrl);
+    else if (kind === 'dist') openDistance(ctrl);
+    else openGeneric(ctrl);
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
@@ -60,10 +84,7 @@
   }
 
   function openCategory(ctrl) {
-    closeAll();
-    ctrl.classList.add('qb-ddopen');
-    var p = document.createElement('div');
-    p.className = 'qb-ddpanel';
+    var p = portal(ctrl);
     var head = document.createElement('div');
     head.className = 'qb-ddhead'; head.textContent = 'All Categories';
     head.style.cursor = 'pointer';
@@ -99,15 +120,10 @@
       it.addEventListener('click', function () { setValue(ctrl, c.label); });
       p.appendChild(it);
     });
-    ctrl.appendChild(p);
   }
 
   function openDistance(ctrl) {
-    closeAll();
-    ctrl.classList.add('qb-ddopen');
-    var p = document.createElement('div');
-    p.className = 'qb-ddpanel';
-    p.style.minWidth = '190px';
+    var p = portal(ctrl);
     DIST.forEach(function (d, i) {
       var it = document.createElement('div');
       it.className = 'qb-dditem' + (i === 0 ? ' on' : '');
@@ -115,10 +131,76 @@
       it.addEventListener('click', function () { setValue(ctrl, d); });
       p.appendChild(it);
     });
-    ctrl.appendChild(p);
+  }
+
+  function openGeneric(ctrl) {
+    var opts = [];
+    try { opts = JSON.parse(ctrl.dataset.qbopts || '[]'); } catch (e) {}
+    var p = portal(ctrl);
+    opts.forEach(function (o) {
+      var it = document.createElement('div');
+      it.className = 'qb-dditem';
+      it.textContent = o;
+      it.addEventListener('click', function (ev) { ev.stopPropagation(); setValue(ctrl, o); });
+      p.appendChild(it);
+    });
+  }
+
+  // tag-only: inert engine "select" fields become delegated dropdowns
+  function makeSelect(ctrl, options) {
+    if (!ctrl || ctrl.dataset.qbsel) return;
+    ctrl.dataset.qbsel = 'generic';
+    ctrl.dataset.qbopts = JSON.stringify(options);
+    ctrl.classList.add('qb-ddwrap');
+    ctrl.style.cursor = 'pointer';
+  }
+
+  // Add-Ads form (Figma 323:10693): working Price Type / City dropdowns,
+  // peach "Select" button, Pickup Only as the designed default
+  function attachAddAds() {
+    if ((window.__QB_SCREEN || '') !== 'addads') return;
+    var leaves = document.querySelectorAll('div, span');
+    for (var i = 0; i < leaves.length; i++) {
+      var n = leaves[i];
+      if (n.childElementCount > 1) continue;
+      var t = (n.textContent || '').trim();
+      if (t === 'Fixed Price' || t === 'Negotiable' || t === 'Free') {
+        makeSelect(n.closest('[style*="border"]') || n.parentElement, ['Fixed Price', 'Negotiable', 'Free']);
+      } else if (t === 'City' || /^(Doha|Al Rayyan|Al Wakrah|Al Khor|Umm Salal|Al Daayen|Al Shahaniya|Al Shamal)$/.test(t)) {
+        makeSelect(n.closest('[style*="border"]') || n.parentElement, ['Doha', 'Al Rayyan', 'Al Wakrah', 'Al Khor', 'Umm Salal', 'Al Daayen', 'Al Shahaniya', 'Al Shamal', 'Al Wukair', 'Lusail']);
+      }
+    }
+    // Select button: peach fill, no border (Figma)
+    var sel = [].find.call(document.querySelectorAll('button, div'), function (e) {
+      return e.childElementCount === 0 && (e.textContent || '').trim() === 'Select' && /border/.test(e.getAttribute('style') || '');
+    });
+    if (sel && !sel.dataset.qbPeach) {
+      sel.dataset.qbPeach = '1';
+      sel.style.background = 'rgb(255,240,234)';
+      sel.style.border = 'none';
+    }
+    // designed default: Pickup Only active (323:10693)
+    if (!window.__qbPickupDone) {
+      var po = [].find.call(document.querySelectorAll('*'), function (e) {
+        return e.childElementCount === 0 && (e.textContent || '').trim() === 'Pickup Only';
+      });
+      var da = [].find.call(document.querySelectorAll('*'), function (e) {
+        return e.childElementCount === 0 && (e.textContent || '').trim() === 'Delivery Available';
+      });
+      if (po && da) {
+        var daBox = da.closest('[style*="border"]');
+        if (daBox && /rgb\(243,\s*128,\s*87\)/.test(daBox.getAttribute('style') || '')) {
+          window.__qbPickupDone = 1;
+          po.click();
+        } else if (daBox) {
+          window.__qbPickupDone = 1; // pickup already default
+        }
+      }
+    }
   }
 
   function attach() {
+    attachAddAds();
     var form = document.querySelector('form[style*="max-width: 1000px"]');
     if (!form) return;
     [].forEach.call(form.children, function (ctrl) {
@@ -131,12 +213,6 @@
       ctrl.dataset.qbsel = kind;
       ctrl.classList.add('qb-ddwrap');
       ctrl.style.cursor = 'pointer';
-      ctrl.addEventListener('click', function (e) {
-        if (e.target.closest('.qb-ddpanel')) return;
-        var open = ctrl.classList.contains('qb-ddopen');
-        closeAll();
-        if (!open) (kind === 'cat' ? openCategory : openDistance)(ctrl);
-      });
     });
   }
 
