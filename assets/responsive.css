@@ -82,6 +82,13 @@ img, svg, video { max-width: 100%; }
     gap: 14px !important;
   }
 
+  /* All-categories directory: 3-up grid (Figma 536:32620) */
+  html[data-screen="catalog"] [style*="minmax(280px, 1fr)"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+  }
+  html[data-screen="catalog"] [style*="minmax(280px, 1fr)"] > * { min-width: 0 !important; }
+
   /* Product page keeps the two-column layout at tablet (Figma 547:39923):
      flexible content column + ~260px rail (seller card, actions, ad meta).
      The content column carries BOTH flex:2 1 560px and min-width:300px; the
