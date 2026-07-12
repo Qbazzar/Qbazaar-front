@@ -77,7 +77,7 @@
     +   'border-radius:12px;background:' + ORANGE + ';color:#fff;text-decoration:none;font:600 15px Poppins}'
     + '@media (max-width:760px){ .qb-burger{display:flex} .qb-hcluster{display:none !important} }'
     + '@media (min-width:761px){ .qb-menu-open .qb-mdrawer{transform:translateX(-102%)} .qb-menu-open .qb-mdrawer-back{opacity:0;pointer-events:none} }'
-    + '@media (max-width:600px){'
+    + '@media (max-width:1000px){'
     +   'footer .qb-fcols{flex-direction:column !important;gap:0 !important;flex-wrap:nowrap !important}'
     +   'footer .qb-facc{flex:1 1 100% !important;width:100% !important;border-bottom:1px solid rgba(0,0,0,.09)}'
     +   'footer .qb-facc:first-of-type{border-top:1px solid rgba(0,0,0,.09)}'
@@ -119,6 +119,9 @@
     + '}';
   var st = document.createElement('style'); st.textContent = CSS;
   (document.head || document.documentElement).appendChild(st);
+
+  /* expose the current screen to CSS so responsive.css can scope per-page rules */
+  document.documentElement.setAttribute('data-screen', (window.__QB_SCREEN || 'home'));
 
   var LOGO = ''; // captured from the page header once available
   function currentFile() { var f = location.pathname.split('/').pop(); return f || 'index.html'; }

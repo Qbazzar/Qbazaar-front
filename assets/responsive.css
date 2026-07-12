@@ -18,8 +18,11 @@ img, svg, video { max-width: 100%; }
 .qb-btn svg { flex: 0 0 auto; }
 .qb-nav.qb-btn { line-height: 0; }
 
-/* ---- "Find Places" scattered pills ------------------------ */
-@media (max-width: 760px) {
+/* ---- "Find Places" scattered pills ------------------------
+   Figma keeps the playful rotated collage on tablet and phone; we wrap the
+   absolutely-positioned pills into rows but keep per-pill tilt so it still
+   reads as the designed collage. */
+@media (max-width: 1000px) {
   .qb-places {
     position: relative;
     max-width: 100% !important;
@@ -27,20 +30,52 @@ img, svg, video { max-width: 100%; }
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px 10px;
+    gap: 12px 12px;
+    padding: 6px 0;
   }
   .qb-places > span {
     position: static !important;
     left: auto !important;
     top: auto !important;
-    transform: none !important;
+  }
+  .qb-places > span:nth-child(3n + 1) { transform: rotate(-7deg) !important; }
+  .qb-places > span:nth-child(3n + 2) { transform: rotate(5deg) !important; margin-top: 8px; }
+  .qb-places > span:nth-child(3n)     { transform: rotate(-3deg) !important; margin-top: 3px; }
+
+  /* Footer: logo/socials block on top, link sections stacked below (Figma) */
+  footer [style*="gap: 40px"][style*="space-between"] {
+    flex-direction: column;
+    gap: 26px !important;
   }
 }
 
-/* ---- tablet ----------------------------------------------- */
+/* ---- tablet layer (Figma 744 designs) ---------------------- */
 @media (max-width: 900px) {
   /* keep two-column areas from squeezing text too hard */
   main, section { min-width: 0; }
+}
+@media (min-width: 601px) and (max-width: 1000px) {
+  /* Home hero search: one pill row — fields + orange Search button inline */
+  form[style*="max-width: 1000px"] { flex-wrap: nowrap !important; padding: 6px 6px 6px 10px !important; }
+  form[style*="max-width: 1000px"] > * { min-width: 0 !important; }
+  form[style*="max-width: 1000px"] .qb-btn,
+  form[style*="max-width: 1000px"] > :last-child { flex: 0 0 auto !important; width: auto !important; }
+
+  /* Home: category cards 4-up, featured companies 3-up (Figma tablet) */
+  html[data-screen="home"] [style*="minmax(300px, 1fr)"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+  }
+  html[data-screen="home"] [style*="minmax(300px, 1fr)"]:has(> :nth-child(6)) {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+  html[data-screen="home"] [style*="minmax(300px, 1fr)"] > * { min-width: 0 !important; }
+
+  /* Home: featured companies 3-up (Figma tablet) */
+  html[data-screen="home"] [style*="minmax(220px, 1fr)"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+  }
 }
 
 /* ---- mobile ----------------------------------------------- */
