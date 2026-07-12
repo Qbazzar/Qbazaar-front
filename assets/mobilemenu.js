@@ -117,6 +117,22 @@
     +     'border:1px solid rgb(237,237,237) !important;border-radius:10px !important;background:#fff !important;'
     +     'color:rgb(51,51,51) !important;font-weight:600 !important;box-shadow:0 2px 8px rgba(0,0,0,.05);white-space:nowrap}'
     + '}'
+    /* ---- Seller pages: Filter / Info become bottom-sheet triggers on
+       compact widths (Figma 616:26793: "Filter ≡" left, "Info ⓘ" right,
+       cards slide up from the bottom). ---- */
+    + '.qb-strig-row{display:none}'
+    + '@media (max-width:1000px){'
+    +   '.qb-strig-row{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 14px}'
+    +   '.qb-strig{display:inline-flex;align-items:center;gap:9px;font:600 17px Poppins;color:#212121;'
+    +     'background:none;border:0;cursor:pointer;padding:4px 2px}'
+    +   '.qb-cardsheet{position:fixed !important;left:0 !important;right:0 !important;bottom:0 !important;top:auto !important;'
+    +     'z-index:99992;max-height:84vh;overflow-y:auto;border-radius:22px 22px 0 0 !important;margin:0 !important;'
+    +     'width:100% !important;max-width:100% !important;transform:translateY(106%);'
+    +     'transition:transform .34s cubic-bezier(.4,0,.2,1);box-shadow:0 -10px 44px rgba(0,0,0,.22) !important;padding-bottom:26px !important}'
+    +   '.qb-cardsheet.qb-open-sheet{transform:translateY(0)}'
+    + '}'
+    + '.qb-cback{position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:99991;opacity:0;pointer-events:none;transition:opacity .25s}'
+    + '.qb-cback.on{opacity:1;pointer-events:auto}'
     /* ---- Messages: two-step list -> chat navigation at compact widths ----
        (Figma tablet/mobile show the inbox alone; the conversation is its own
        screen with a back affordance.) */
@@ -490,7 +506,66 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); }
+  // Seller pages: tag the Advanced Filters / Info cards as bottom sheets and
+  // inject the "Filter ≡ / Info ⓘ" trigger row under the tabs (Figma 616:26793)
+  function cardOf(leafText, minFs) {
+    var els = document.querySelectorAll('div, h2, h3, span');
+    for (var i = 0; i < els.length; i++) {
+      var e = els[i];
+      if (e.childElementCount !== 0 || (e.textContent || '').trim() !== leafText) continue;
+      if (minFs && parseFloat(getComputedStyle(e).fontSize) < minFs) continue;
+      var card = e;
+      while (card && !/rgb\(255,\s*255,\s*255\)/.test(card.getAttribute('style') || '')) card = card.parentElement;
+      return card;
+    }
+    return null;
+  }
+  function sellerCompact() {
+    if (!/^seller(Ind|Org)?$/.test(window.__QB_SCREEN || '')) return;
+    var filters = cardOf('Advanced Filters');
+    var info = cardOf('Info', 17);
+    if (filters && !filters.classList.contains('qb-cardsheet')) filters.classList.add('qb-cardsheet');
+    if (info && !info.classList.contains('qb-cardsheet')) info.classList.add('qb-cardsheet');
+    if (document.querySelector('.qb-strig-row')) return;
+    // tabs row = container of the "About us" tab
+    var about = [].find.call(document.querySelectorAll('*'), function (e) {
+      return e.childElementCount === 0 && (e.textContent || '').trim() === 'About us';
+    });
+    if (!about) return;
+    var tabs = about.parentElement;
+    while (tabs && !/Legal Info/.test(tabs.textContent || '')) tabs = tabs.parentElement;
+    if (!tabs || !tabs.parentElement) return;
+    var row = document.createElement('div');
+    row.className = 'qb-strig-row';
+    row.innerHTML = ''
+      + '<button type="button" class="qb-strig" data-sheet="filters">Filter ' + FUNNEL + '</button>'
+      + '<button type="button" class="qb-strig" data-sheet="info">Info '
+      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 11v5M12 8h.01"/></svg></button>';
+    tabs.parentElement.insertBefore(row, tabs.nextSibling);
+  }
+  function closeCardSheet() {
+    document.querySelectorAll('.qb-cardsheet.qb-open-sheet').forEach(function (c) { c.classList.remove('qb-open-sheet'); });
+    var bk = document.querySelector('.qb-cback');
+    if (bk) bk.classList.remove('on');
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('.qb-strig');
+    if (!t) return;
+    var card = t.dataset.sheet === 'filters' ? cardOf('Advanced Filters') : cardOf('Info', 17);
+    if (!card) return;
+    var bk = document.querySelector('.qb-cback');
+    if (!bk) {
+      bk = document.createElement('div');
+      bk.className = 'qb-cback';
+      bk.addEventListener('click', closeCardSheet);
+      document.body.appendChild(bk);
+    }
+    card.classList.add('qb-cardsheet', 'qb-open-sheet');
+    bk.classList.add('on');
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeCardSheet(); });
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); }
 
   function start() {
     apply();
