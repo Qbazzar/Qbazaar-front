@@ -353,7 +353,44 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); }
+  // Logged-out header (Figma 741:38067 "Home Page - Before Log/Sign"):
+  // until the auth flow is completed (localStorage.qbAuth), the avatar is
+  // replaced by Login / Sign Up buttons that open the auth pages.
+  function guestHeader() {
+    var authed = localStorage.getItem('qbAuth') === '1';
+    var fa = null;
+    var els = document.querySelectorAll('.qb-hcluster *');
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].childElementCount === 0 && (els[i].textContent || '').trim() === 'FA') { fa = els[i]; break; }
+    }
+    if (!fa) return;
+    var avatar = fa.parentElement;
+    var host = avatar.parentElement;
+    var btns = host.querySelector('.qb-guest-btns');
+    if (authed) {
+      avatar.style.display = '';
+      if (btns) btns.remove();
+      return;
+    }
+    avatar.style.display = 'none';
+    if (btns) return;
+    btns = document.createElement('span');
+    btns.className = 'qb-guest-btns';
+    btns.setAttribute('style', 'display:inline-flex;gap:10px;align-items:center;margin-left:4px');
+    btns.innerHTML = ''
+      + '<a href="login.html" style="font:600 14px Poppins;color:rgb(51,51,51);text-decoration:none;'
+      +   'padding:10px 18px;border:1px solid rgb(237,237,237);border-radius:10px;background:#fff">Login</a>'
+      + '<a href="signup.html" style="font:600 14px Poppins;color:#fff;text-decoration:none;'
+      +   'padding:10px 18px;border-radius:10px;background:rgb(243,128,87)">Sign Up</a>';
+    host.insertBefore(btns, avatar);
+  }
+  // completing the last auth step signs in; Log Out signs out
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href="login.html"]');
+    if (a && /Log Out/.test(a.textContent || '')) localStorage.removeItem('qbAuth');
+  }, true);
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); }
 
   function start() {
     apply();

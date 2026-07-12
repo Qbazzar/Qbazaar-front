@@ -1,5 +1,10 @@
-/* Q Bazaar — auth flow helpers: password eye toggle + OTP auto-advance. */
+/* Q Bazaar — auth flow helpers: password eye toggle, OTP auto-advance,
+   and signing in when the final verification step is submitted. */
 (function () {
+  // forms that land on index.html complete the journey -> signed in
+  document.querySelectorAll('form[action="index.html"]').forEach(function (f) {
+    f.addEventListener('submit', function () { localStorage.setItem('qbAuth', '1'); });
+  });
   document.querySelectorAll('.qb-eye').forEach(function (b) {
     b.addEventListener('click', function () {
       var inp = document.getElementById(b.getAttribute('data-eye'));
