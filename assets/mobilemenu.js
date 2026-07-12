@@ -1,8 +1,8 @@
-/* Q Bazaar — mobile navigation drawer (Figma mobile layout).
+﻿/* Q Bazaar â€” mobile navigation drawer (Figma mobile layout).
    On phones the header's icon cluster is hidden and a hamburger opens a slide-in
    drawer with the full navigation (Home, Categories, Favorites, Messages, Saved
    Search, My Ads, Sales Overview, Account Settings, Wallet, Log Out) plus an
-   Add Ads button — matching the Figma "Menu" screens. Pure HTML/CSS/JS, links to
+   Add Ads button â€” matching the Figma "Menu" screens. Pure HTML/CSS/JS, links to
    the existing page files. Re-applies after the engine's re-renders. */
 (function () {
   var I = {
@@ -24,7 +24,7 @@
     ['Notifications', 'notifications.html', I.bell],
     ['Saved Search', 'saved-search.html', I.search], ['My Ads', 'my-ads.html', I.tag],
     ['Sales Overview', 'sales-overview.html', I.chart], ['Account Settings', 'account.html', I.gear],
-    ['Wallet', 'account.html', I.wallet], ['Log Out', 'login.html', I.out]
+    ['Wallet', 'wallet.html', I.wallet], ['Log Out', 'login.html', I.out]
   ];
   var ORANGE = 'rgb(243,128,87)';
 
@@ -118,7 +118,7 @@
     +     'color:rgb(51,51,51) !important;font-weight:600 !important;box-shadow:0 2px 8px rgba(0,0,0,.05);white-space:nowrap}'
     + '}'
     /* ---- Seller pages: Filter / Info become bottom-sheet triggers on
-       compact widths (Figma 616:26793: "Filter ≡" left, "Info ⓘ" right,
+       compact widths (Figma 616:26793: "Filter â‰،" left, "Info â“ک" right,
        cards slide up from the bottom). ---- */
     + '.qb-strig-row{display:none}'
     + '@media (max-width:1000px){'
@@ -172,7 +172,7 @@
     bell.innerHTML = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + I.bell + '</svg><span class="dot"></span>';
 
     // globe -> language picker (matches Figma mobile header)
-    var LANGS = [['English', '🇬🇧'], ['Arabic', '🇸🇦'], ['India', '🇮🇳'], ['Urdu', '🇵🇰'], ['Bengali', '🇧🇩'], ['Tagalog', '🇵🇭'], ['Persian (Farsi)', '🇮🇷'], ['Tamil', '🇮🇳']];
+    var LANGS = [['English', 'ًں‡¬ًں‡§'], ['Arabic', 'ًں‡¸ًں‡¦'], ['India', 'ًں‡®ًں‡³'], ['Urdu', 'ًں‡µًں‡°'], ['Bengali', 'ًں‡§ًں‡©'], ['Tagalog', 'ًں‡µًں‡­'], ['Persian (Farsi)', 'ًں‡®ًں‡·'], ['Tamil', 'ًں‡®ًں‡³']];
     var globe = document.createElement('button');
     globe.id = 'qb-mglobe'; globe.className = 'qb-mglobe'; globe.setAttribute('aria-label', 'Language');
     globe.innerHTML = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>';
@@ -206,7 +206,7 @@
       + '<button class="qb-mdrawer-x" aria-label="Close">&times;</button></div>'
       + '<div class="qb-mdrawer-hd">Menu</div>'
       + '<div class="qb-mnav">' + links + '</div>'
-      + '<div class="qb-mdrawer-ft"><a href="add-ads.html">＋ Add Ads</a></div>';
+      + '<div class="qb-mdrawer-ft"><a href="add-ads.html">ï¼‹ Add Ads</a></div>';
     drawer.querySelector('.qb-mdrawer-x').addEventListener('click', function () { setOpen(false); });
 
     document.body.appendChild(back);
@@ -272,7 +272,7 @@
     apply2.addEventListener('click', closeSheet);
     document.body.appendChild(back);
     document.body.appendChild(apply2);
-    // Open when the (otherwise inert) "Filter" button is tapped — via delegation,
+    // Open when the (otherwise inert) "Filter" button is tapped â€” via delegation,
     // so no per-element wiring and nothing to re-attach after a re-render.
     document.addEventListener('click', function (e) {
       if (!isPhone()) return;
@@ -452,7 +452,7 @@
       var stats = document.createElement('div');
       stats.className = 'qb-sstats';
       stats.setAttribute('style', 'font:400 15px Poppins;color:rgb(161,159,159);margin-top:5px');
-      stats.innerHTML = '8,429 <span style="color:#bdbdbd">Ads</span> &nbsp;•&nbsp; 7,429 Followers &nbsp;•&nbsp; <span style="color:rgb(61,190,100);font-weight:500">+2K Today</span>';
+      stats.innerHTML = '8,429 <span style="color:#bdbdbd">Ads</span> &nbsp;â€¢&nbsp; 7,429 Followers &nbsp;â€¢&nbsp; <span style="color:rgb(61,190,100);font-weight:500">+2K Today</span>';
       host.parentElement.insertBefore(stats, host.nextSibling);
     }
   }
@@ -507,7 +507,7 @@
   }
 
   // Seller pages: tag the Advanced Filters / Info cards as bottom sheets and
-  // inject the "Filter ≡ / Info ⓘ" trigger row under the tabs (Figma 616:26793)
+  // inject the "Filter â‰، / Info â“ک" trigger row under the tabs (Figma 616:26793)
   function cardOf(leafText, minFs) {
     var els = document.querySelectorAll('div, h2, h3, span');
     for (var i = 0; i < els.length; i++) {
@@ -594,3 +594,4 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+

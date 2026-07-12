@@ -141,7 +141,73 @@
     }, true);
   }
 
-  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); }
+  // Wallet page (Figma 502:22401): account shell + injected wallet panel
+  // (3 stat cards + transaction history). Engine morphs restore the template
+  // content, so re-inject whenever the panel is missing.
+  function walletize() {
+    if (!window.__QB_WALLET) return;
+    if (document.querySelector('.qb-wallet-panel')) return;
+    var content = document.querySelector('[style*="flex: 3 1 460px"]');
+    if (!content) return;
+    document.title = 'Q Bazaar — Wallet';
+    var card = 'background:#fff;border:1px solid #ededed;border-radius:16px;box-shadow:0 4px 40px rgba(161,161,161,.15);';
+    var stat = function (label, val) {
+      return '<div style="' + card + 'flex:1;padding:22px 24px;min-width:0">'
+        + '<div style="font:400 16px Poppins;color:#999">' + label + '</div>'
+        + '<div style="font:600 28px Poppins;color:#333;margin-top:6px">' + val + '</div></div>';
+    };
+    var srow = 'display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr .9fr;gap:16px;align-items:center;';
+    var trow = function (item, buyer, date, method, status, scolor, amount) {
+      return '<div style="' + srow + 'padding:18px 0;border-top:1px solid #f3f3f3">'
+        + '<div style="min-width:0"><div style="font:600 16px Poppins;color:#333">' + item + '</div>'
+        + '<div style="font:400 15px Poppins;color:#999;margin-top:4px">' + buyer + '</div></div>'
+        + '<div style="font:500 16px Poppins;color:#8e8e8e">' + date + '</div>'
+        + '<div style="font:500 16px Poppins;color:#8e8e8e">' + method + '</div>'
+        + '<div style="font:500 14px Poppins;color:' + scolor + '">' + status + '</div>'
+        + '<div style="font:600 16px Poppins;color:#221122;text-align:right">' + amount + '</div></div>';
+    };
+    var panel = document.createElement('div');
+    panel.className = 'qb-wallet-panel';
+    panel.innerHTML = ''
+      + '<div style="font:600 20px Poppins;color:#424242">Wallet</div>'
+      + '<div style="font:500 14px Poppins;color:#9e9e9e;margin:6px 0 24px">View your wallet balance, manage payment methods, and track your transactions.</div>'
+      + '<div style="display:flex;gap:20px;flex-wrap:wrap">'
+      + stat('Total Revenue', 'QAR 450.00') + stat('Complete Sales', '3') + stat('Pending Payout', 'QAR 100.00')
+      + '</div>'
+      + '<div style="' + card + 'margin-top:28px;padding:26px 28px">'
+      + '<div style="font:600 24px Poppins;color:#333;margin-bottom:20px">Transaction History</div>'
+      + '<div style="' + srow + 'padding-bottom:14px"><div style="font:500 16px Poppins;color:#8e8e8e">Item &amp; Buyer</div>'
+      + '<div style="font:500 16px Poppins;color:#8e8e8e">Date</div><div style="font:500 16px Poppins;color:#8e8e8e">Payment Method</div>'
+      + '<div style="font:500 16px Poppins;color:#8e8e8e">Status</div><div style="font:500 16px Poppins;color:#8e8e8e;text-align:right">Amount</div></div>'
+      + trow('Neutrogena Cream', 'Farah M.', 'June 2, 2026', 'PayPal', 'Complete', 'rgb(27,173,7)', 'QAR 60.00')
+      + trow('Neutrogena Cream', 'Farah M.', 'June 2, 2026', 'PayPal', 'Pending', 'rgb(243,128,87)', 'QAR 60.00')
+      + trow('BMW 320d Touring M-Sport', 'Omar K.', 'May 28, 2026', 'QNB', 'Complete', 'rgb(27,173,7)', 'QAR 330.00')
+      + '</div>';
+    content.innerHTML = '';
+    content.appendChild(panel);
+    // highlight Wallet in the settings nav
+    var w = [].find.call(document.querySelectorAll('*'), function (e) {
+      return e.childElementCount === 0 && (e.textContent || '').trim() === 'Wallet';
+    });
+    var navItem = w && w.closest('.qb-navitem');
+    if (navItem) {
+      document.querySelectorAll('.qb-navitem-active').forEach(function (x) { x.classList.remove('qb-navitem-active'); });
+      navItem.classList.add('qb-navitem-active');
+    }
+  }
+  // settings-nav Wallet item navigates to the wallet page
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    for (var i = 0; i < 3 && t; i++) {
+      if (t.nodeType === 1 && (t.textContent || '').trim() === 'Wallet' && t.closest && t.closest('.qb-navitem')) {
+        if (!window.__QB_WALLET) { e.preventDefault(); e.stopImmediatePropagation(); location.href = 'wallet.html'; }
+        return;
+      }
+      t = t.parentElement;
+    }
+  }, true);
+
+  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); walletize(); }
   run();
   new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();
