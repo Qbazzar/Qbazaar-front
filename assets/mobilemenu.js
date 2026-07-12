@@ -100,7 +100,7 @@
        and are created once. `qb-sheet-ready` gates the fixed positioning so the
        filters stay inline (usable) if the script never runs. */
     + '.qb-sheet-back,.qb-sheet-apply{display:none}'
-    + '@media (max-width:600px){'
+    + '@media (max-width:1000px){'
     +   'body.qb-sheet-ready aside[style*="min-width: 260px"]{position:fixed !important;left:0 !important;right:0 !important;'
     +     'bottom:0 !important;top:auto !important;width:100% !important;max-width:100% !important;min-width:0 !important;'
     +     'margin:0 !important;z-index:99992;max-height:86vh;overflow-y:auto;border-radius:22px 22px 0 0 !important;'
@@ -215,7 +215,7 @@
       links.classList.add('qb-flinks');
       (function (col) {
         h.addEventListener('click', function () {
-          if (window.matchMedia('(max-width: 600px)').matches) col.classList.toggle('qb-open');
+          if (window.matchMedia('(max-width: 1000px)').matches) col.classList.toggle('qb-open');
         });
       })(col);
     }
@@ -225,7 +225,7 @@
 
   function openSheet() { document.body.classList.add('qb-sheet-open'); }
   function closeSheet() { document.body.classList.remove('qb-sheet-open'); }
-  function isPhone() { return window.matchMedia('(max-width: 600px)').matches; }
+  function isPhone() { return window.matchMedia('(max-width: 1000px)').matches; }
 
   // One-time wiring for the mobile filter sheet. Deliberately touches ONLY <body>
   // (never the engine-managed sidebar), so it can't fight the engine's re-renders
@@ -280,7 +280,31 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); }
+  // Listing pages: at compact widths the sidebar is a bottom sheet, so the
+  // toolbar needs a real "Filter" trigger (design 539:35503 shows the pill).
+  function ensureFilterTrigger() {
+    var ex = document.querySelector('.qb-filter-inject');
+    if (!isPhone()) { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); return; }
+    if (ex) return;
+    var aside = document.querySelector('aside[style*="min-width: 260px"]');
+    if (!aside) return;
+    var leaves = document.querySelectorAll('div, span, button');
+    for (var i = 0; i < leaves.length; i++) {
+      var n = leaves[i];
+      if (n.children.length <= 1 && /^Newest\b/.test((n.textContent || '').trim())) {
+        var row = n.parentElement;
+        if (!row) return;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'qb-filter-btn qb-filter-inject';
+        b.innerHTML = FUNNEL + '<span>Filter</span>';
+        row.insertBefore(b, row.firstChild);
+        return;
+      }
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); }
 
   function start() {
     apply();
