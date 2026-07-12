@@ -42,3 +42,12 @@ button[style*="background: rgb(243, 128, 87)"]:hover,
 .qb-card:hover {
   box-shadow: 0 4px 40px rgba(161, 161, 161, .25);
 }
+
+/* ---- seller pages: ad grid is 3-up like the Figma frames ----- */
+@media (min-width: 1001px) {
+  html[data-screen="sellerOrg"] [style*="minmax(230px, 1fr)"],
+  html[data-screen="sellerInd"] [style*="minmax(230px, 1fr)"],
+  html[data-screen="seller"] [style*="minmax(230px, 1fr)"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}

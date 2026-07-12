@@ -227,6 +227,17 @@ img, svg, video { max-width: 100%; }
   }
 }
 
+/* ---- sales table: swipeable inside its card on phones ------ */
+@media (max-width: 600px) {
+  html[data-screen="salesOverview"] :has(> [style*="2fr 1.2fr 1.2fr 1fr 0.9fr"]) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  html[data-screen="salesOverview"] [style*="2fr 1.2fr 1.2fr 1fr 0.9fr"] {
+    min-width: 640px;
+  }
+}
+
 /* ---- carousel arrows: smaller on touch screens ------------ */
 @media (max-width: 600px) {
   .qb-slide-btn { width: 36px; height: 36px; font-size: 20px; }

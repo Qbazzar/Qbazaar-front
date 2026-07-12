@@ -390,7 +390,58 @@
     if (a && /Log Out/.test(a.textContent || '')) localStorage.removeItem('qbAuth');
   }, true);
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); }
+  // Seller pages hero (Figma 145:1063 / 136:1562): photo cover banner,
+  // circular avatar overlapping it, and the Ads/Followers/Today stats row.
+  function sellerHero() {
+    if (!/^seller(Ind|Org)?$/.test(window.__QB_SCREEN || '')) return;
+    if (document.querySelector('.qb-scover')) return;
+    // profile bar = element containing the Follow button and the seller name
+    var follow = [].find.call(document.querySelectorAll('*'), function (e) {
+      return e.childElementCount <= 1 && /^Follow$/.test((e.textContent || '').trim());
+    });
+    if (!follow) return;
+    var bar = follow.parentElement;
+    while (bar && !/rgb\(255,\s*255,\s*255\)/.test(bar.getAttribute('style') || '')) bar = bar.parentElement;
+    if (!bar) return;
+    var name = (bar.textContent || '').trim().split(/\s/)[0] || 'BT';
+    var caps = name.match(/[A-Z]/g) || [];
+    var initials = (caps.length >= 2 ? caps.slice(0, 2).join('') : name.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase()) || 'BT';
+    // reuse one of the page's own card photos for the cover
+    var cover = '';
+    var ph = [].find.call(document.querySelectorAll('.qb-ph'), function (e) {
+      return /url\(/.test((e.getAttribute('style') || '') + getComputedStyle(e).backgroundImage);
+    });
+    if (ph) { var m = /url\(["']?([^"')]+)/.exec(getComputedStyle(ph).backgroundImage); if (m) cover = m[1]; }
+    var cv = document.createElement('div');
+    cv.className = 'qb-scover';
+    cv.setAttribute('style', 'height:190px;border-radius:16px 16px 0 0;margin:0;'
+      + (cover ? 'background:url(' + JSON.stringify(cover) + ') center/cover no-repeat;' : 'background:linear-gradient(100deg,rgb(255,240,234),rgb(250,224,212));'));
+    bar.parentElement.insertBefore(cv, bar);
+    bar.parentElement.style.marginTop = '-170px'; // swallow the engine's empty gray band
+    // avatar + stats inside the bar
+    var av = document.createElement('div');
+    av.className = 'qb-savatar';
+    av.setAttribute('style', 'width:96px;height:96px;border-radius:50%;background:#fff;border:4px solid #fff;'
+      + 'box-shadow:0 4px 25px rgba(188,188,188,.3);display:flex;align-items:center;justify-content:center;'
+      + 'font:600 26px Poppins;color:rgb(120,120,120);margin-top:-64px;flex:0 0 auto');
+    av.textContent = initials;
+    bar.insertBefore(av, bar.firstChild);
+    bar.style.alignItems = 'center';
+    bar.style.gap = '18px';
+    var nameEl = [].find.call(bar.querySelectorAll('*'), function (e) {
+      return e.childElementCount <= 1 && (e.textContent || '').trim() === name;
+    });
+    var host = nameEl ? nameEl.parentElement : null;
+    if (host && !bar.querySelector('.qb-sstats')) {
+      var stats = document.createElement('div');
+      stats.className = 'qb-sstats';
+      stats.setAttribute('style', 'font:400 15px Poppins;color:rgb(161,159,159);margin-top:5px');
+      stats.innerHTML = '8,429 <span style="color:#bdbdbd">Ads</span> &nbsp;•&nbsp; 7,429 Followers &nbsp;•&nbsp; <span style="color:rgb(61,190,100);font-weight:500">+2K Today</span>';
+      host.parentElement.insertBefore(stats, host.nextSibling);
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); }
 
   function start() {
     apply();
