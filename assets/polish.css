@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Story+Script&display=swap');
+
 /* ============================================================
    Q Bazaar — polish layer: shadows, hovers, micro-interactions.
    Values come from the Figma file's own tokens:
@@ -41,6 +43,19 @@ button[style*="background: rgb(243, 128, 87)"]:hover,
 /* ---- card hover: same design family, one step stronger ----- */
 .qb-card:hover {
   box-shadow: 0 4px 40px rgba(161, 161, 161, .25);
+}
+
+/* ---- notifications: design thumbnails are 191x160 r24 (455:14636) ---- */
+html[data-screen="notifications"] [style*="min-height: 180px"][style*="border-radius: 24px"] {
+  min-height: 0 !important;
+  align-items: center;
+}
+html[data-screen="notifications"] [style*="min-height: 180px"][style*="border-radius: 24px"] > .qb-ph {
+  width: 191px !important;
+  min-width: 191px !important;
+  max-width: 191px !important;
+  height: 160px !important;
+  border-radius: 24px !important;
 }
 
 /* ---- seller pages: ad grid is 3-up like the Figma frames ----- */

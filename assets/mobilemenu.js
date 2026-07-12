@@ -441,7 +441,26 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); }
+  // Home hero "Find Places Around Your Location": the design sets the word
+  // "Location" in Story Script 64px orange (rest Poppins SemiBold 56).
+  function locationWord() {
+    var els = document.querySelectorAll('span, div, i, em, b');
+    for (var i = 0; i < els.length; i++) {
+      var e = els[i];
+      if (e.dataset.qbStory || e.childElementCount !== 0) continue;
+      if ((e.textContent || '').trim() !== 'Location') continue;
+      var fs = parseFloat(getComputedStyle(e).fontSize);
+      if (fs < 36) continue; // only the big hero word
+      e.dataset.qbStory = '1';
+      e.style.fontFamily = "'Story Script', cursive";
+      e.style.fontSize = '64px';
+      e.style.fontStyle = 'normal';
+      e.style.fontWeight = '400';
+      e.style.color = 'rgb(243,128,87)';
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); }
 
   function start() {
     apply();
