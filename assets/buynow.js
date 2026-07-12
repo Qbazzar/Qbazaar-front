@@ -88,7 +88,60 @@
     });
   }
 
-  function run() { transform(); rewireProduct(); transformCheckout(); }
+  // Payment result modals (Figma 684:33194 success / 689:33489 failure).
+  // Success is the default; append ?fail=1 to checkout.html to preview the
+  // failure state.
+  var MCSS = ''
+    + '.qb-paymodal-back{position:fixed;inset:0;background:rgba(30,30,30,.45);z-index:99995;display:flex;align-items:center;justify-content:center}'
+    + '.qb-paymodal{background:#fff;border-radius:20px;box-shadow:0 24px 64px rgba(0,0,0,.25);width:min(430px,92vw);padding:38px 34px 26px;text-align:center;font-family:Poppins,sans-serif}'
+    + '.qb-paymodal .ic{width:54px;height:54px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;background:rgb(255,240,234)}'
+    + '.qb-paymodal h3{font:600 20px Poppins;color:#212121;margin:0 0 10px}'
+    + '.qb-paymodal p{font:400 14px/1.65 Poppins;color:#9a9a9a;margin:0 0 22px}'
+    + '.qb-paymodal .btn{display:block;width:100%;background:#F38057;color:#fff;border:0;border-radius:10px;padding:14px;font:600 14px Poppins;cursor:pointer;text-decoration:none;transition:background .18s}'
+    + '.qb-paymodal .btn:hover{background:rgb(233,108,63)}'
+    + '.qb-paymodal .lnk{display:inline-block;margin-top:14px;color:#F38057;font:500 14px Poppins;cursor:pointer;text-decoration:none;background:none;border:0}';
+  var mcssDone = false;
+  function payModal(ok) {
+    if (!mcssDone) { var st = document.createElement('style'); st.textContent = MCSS; document.head.appendChild(st); mcssDone = true; }
+    var old = document.querySelector('.qb-paymodal-back');
+    if (old) old.remove();
+    var back = document.createElement('div');
+    back.className = 'qb-paymodal-back';
+    var check = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F38057" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>';
+    var cross = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F38057" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="m9 9 6 6M15 9l-6 6"/></svg>';
+    back.innerHTML = '<div class="qb-paymodal">'
+      + '<div class="ic">' + (ok ? check : cross) + '</div>'
+      + '<h3>' + (ok ? 'Payment Successful' : 'Payment Failed') + '</h3>'
+      + '<p>' + (ok
+        ? 'Your payment has been completed successfully. The seller has been notified and your order is now being processed.'
+        : "We couldn't process your payment. Please try again or choose a different payment method.") + '</p>'
+      + (ok
+        ? '<a class="btn" href="index.html">Back to home</a><button type="button" class="lnk" data-close="1">Cancel</button>'
+        : '<button type="button" class="btn" data-close="1">Try Again</button><button type="button" class="lnk" data-close="1">Change Payment Method</button>')
+      + '</div>';
+    back.addEventListener('click', function (e) {
+      if (e.target === back || (e.target.dataset && e.target.dataset.close)) back.remove();
+    });
+    document.body.appendChild(back);
+  }
+  var checkoutWired = false;
+  function wireCheckout() {
+    if (checkoutWired || (window.__QB_SCREEN || '') !== 'checkout') return;
+    checkoutWired = true;
+    document.addEventListener('click', function (e) {
+      var el = e.target;
+      for (var i = 0; i < 4 && el; i++) {
+        if (el.nodeType === 1 && /^\s*Complete Payment\s*$/.test(el.textContent || '')) {
+          e.preventDefault(); e.stopImmediatePropagation();
+          payModal(!/[?&]fail=1/.test(location.search));
+          return;
+        }
+        el = el.parentElement;
+      }
+    }, true);
+  }
+
+  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); }
   run();
   new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();
