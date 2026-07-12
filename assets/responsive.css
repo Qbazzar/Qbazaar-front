@@ -47,6 +47,11 @@ img, svg, video { max-width: 100%; }
     flex-direction: column;
     gap: 26px !important;
   }
+  /* in a column the children's flex-basis would become height — neutralise */
+  footer [style*="gap: 40px"][style*="space-between"] > * {
+    flex: 0 0 auto !important;
+    max-width: none !important;
+  }
 }
 
 /* ---- tablet layer (Figma 744 designs) ---------------------- */
