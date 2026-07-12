@@ -81,6 +81,32 @@ img, svg, video { max-width: 100%; }
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 14px !important;
   }
+
+  /* Product page keeps the two-column layout at tablet (Figma 547:39923):
+     flexible content column + ~260px rail (seller card, actions, ad meta).
+     The content column carries BOTH flex:2 1 560px and min-width:300px; the
+     rail is its next sibling. */
+  html[data-screen="product"] [style*="flex: 2 1 560px"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+  html[data-screen="product"] [style*="flex: 2 1 560px"] + * {
+    flex: 0 0 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+  }
+  html[data-screen="product"] :has(> [style*="2 1 560px"]) {
+    flex-wrap: nowrap !important;
+  }
+  /* Technical Data stays two columns like the Figma "Featuers" card */
+  html[data-screen="product"] [style*="grid-template-columns"]:not(:has(svg)) {
+    grid-template-columns: repeat(2, 1fr) !important;
+    column-gap: 18px !important;
+  }
+  /* Features & Extras is a single-column list on tablet (Figma) */
+  html[data-screen="product"] [style*="grid-template-columns: 1fr 1fr"]:has(svg) {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* ---- mobile ----------------------------------------------- */
