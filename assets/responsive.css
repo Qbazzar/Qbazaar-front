@@ -114,6 +114,20 @@ img, svg, video { max-width: 100%; }
   html[data-screen="product"] [style*="grid-template-columns: 1fr 1fr"]:has(svg) {
     grid-template-columns: 1fr !important;
   }
+
+  /* Settings pages keep the nav rail + content two-column layout at tablet
+     (Figma 561:30374): narrow settings menu left, panels right */
+  html[data-screen="account"] [style*="flex: 3 1 460px"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+  }
+  html[data-screen="account"] [style*="flex: 1 1 260px"][style*="max-width: 320px"] {
+    flex: 0 0 210px !important;
+    min-width: 210px !important;
+  }
+  html[data-screen="account"] :has(> [style*="flex: 3 1 460px"]) {
+    flex-wrap: nowrap !important;
+  }
 }
 
 /* ---- mobile ----------------------------------------------- */
