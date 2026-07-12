@@ -116,6 +116,19 @@
     +   '.qb-filter-btn{display:inline-flex !important;align-items:center;gap:8px;padding:10px 18px !important;'
     +     'border:1px solid rgb(237,237,237) !important;border-radius:10px !important;background:#fff !important;'
     +     'color:rgb(51,51,51) !important;font-weight:600 !important;box-shadow:0 2px 8px rgba(0,0,0,.05);white-space:nowrap}'
+    + '}'
+    /* ---- Messages: two-step list -> chat navigation at compact widths ----
+       (Figma tablet/mobile show the inbox alone; the conversation is its own
+       screen with a back affordance.) */
+    + '.qb-chat-back{display:none}'
+    + '@media (max-width:1000px){'
+    +   '.qb-mlist{flex:1 1 100% !important;min-width:0 !important;border-right:none !important}'
+    +   '.qb-mchat{display:none !important}'
+    +   'body.qb-chat-open .qb-mlist{display:none !important}'
+    +   'body.qb-chat-open .qb-mchat{display:flex !important;flex:1 1 100% !important;min-width:0 !important}'
+    +   'body.qb-chat-open .qb-chat-back{display:inline-flex;align-items:center;gap:8px;margin:14px 16px 0;'
+    +     'padding:8px 14px;border:1px solid rgb(237,237,237);border-radius:10px;background:#fff;'
+    +     'font:600 13px Poppins;color:rgb(51,51,51);cursor:pointer;align-self:flex-start}'
     + '}';
   var st = document.createElement('style'); st.textContent = CSS;
   (document.head || document.documentElement).appendChild(st);
@@ -261,6 +274,13 @@
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
     document.body.classList.add('qb-sheet-ready');
+    // Messages: tapping a conversation in the inbox opens the chat pane
+    document.addEventListener('click', function (e) {
+      if (!isPhone()) return;
+      var list = e.target.closest && e.target.closest('.qb-mlist');
+      if (!list || e.target.tagName === 'INPUT') return;
+      document.body.classList.add('qb-chat-open');
+    });
   }
 
   // Cosmetic only: give the "Filter" button a pill + funnel icon on phones.
@@ -304,7 +324,36 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); }
+  // Messages page: tag the inbox / conversation panes so the compact-width
+  // CSS can swap between them (two-step navigation like the Figma frames).
+  function tagMessages() {
+    if ((window.__QB_SCREEN || '') !== 'messages') return;
+    var inp = document.querySelector('input[placeholder*="Type your message"]');
+    if (!inp) return;
+    var chat = inp;
+    while (chat && chat.parentElement) {
+      var sib = null, par = chat.parentElement;
+      for (var i = 0; i < par.children.length; i++) {
+        var c = par.children[i];
+        if (c !== chat && /border-right/.test(c.getAttribute('style') || '')) sib = c;
+      }
+      if (sib) {
+        if (!chat.classList.contains('qb-mchat')) {
+          chat.classList.add('qb-mchat');
+          sib.classList.add('qb-mlist');
+          var back = document.createElement('button');
+          back.type = 'button'; back.className = 'qb-chat-back';
+          back.innerHTML = '&#8249;&nbsp; Messages';
+          back.addEventListener('click', function () { document.body.classList.remove('qb-chat-open'); });
+          chat.insertBefore(back, chat.firstChild);
+        }
+        return;
+      }
+      chat = par;
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); }
 
   function start() {
     apply();
