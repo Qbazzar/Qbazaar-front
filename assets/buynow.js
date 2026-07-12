@@ -73,7 +73,22 @@
     });
   }
 
-  function run() { transform(); rewireProduct(); }
+  // Checkout copy per Figma 682:32513: QNB + Cash methods, "Complete Payment"
+  function transformCheckout() {
+    if ((window.__QB_SCREEN || '') !== 'checkout') return;
+    var MAP = {
+      'Bank Transfer': 'Qatar National Bank(QNB)',
+      'Cash on Delivery': 'Cash',
+      'Complete Purchase': 'Complete Payment'
+    };
+    [].forEach.call(document.querySelectorAll('*'), function (e) {
+      if (e.childElementCount !== 0) return;
+      var t = (e.textContent || '').trim();
+      if (MAP[t]) e.textContent = MAP[t];
+    });
+  }
+
+  function run() { transform(); rewireProduct(); transformCheckout(); }
   run();
   new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();
