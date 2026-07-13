@@ -133,6 +133,17 @@
     + '}'
     + '.qb-cback{position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:99991;opacity:0;pointer-events:none;transition:opacity .25s}'
     + '.qb-cback.on{opacity:1;pointer-events:auto}'
+    /* ---- Settings on phones: two-step hub -> panel (Figma 613:28184) ---- */
+    + '.qb-acct-back{display:none}'
+    + '@media (max-width:600px){'
+    +   'html[data-screen="account"] [style*="flex: 3 1 460px"]{display:none !important}'
+    +   'html[data-screen="account"] body.qb-acct-open [style*="flex: 3 1 460px"],'
+    +   'body.qb-acct-open [style*="flex: 3 1 460px"]{display:flex !important}'
+    +   'body.qb-acct-open [style*="flex: 1 1 260px"][style*="max-width: 320px"]{display:none !important}'
+    +   'body.qb-acct-open .qb-acct-back{display:inline-flex;align-items:center;gap:8px;margin:2px 0 12px;'
+    +     'padding:9px 15px;border:1px solid rgb(237,237,237);border-radius:10px;background:#fff;'
+    +     'font:600 13px Poppins;color:rgb(51,51,51);cursor:pointer}'
+    + '}'
     /* ---- Messages: two-step list -> chat navigation at compact widths ----
        (Figma tablet/mobile show the inbox alone; the conversation is its own
        screen with a back affordance.) */
@@ -296,6 +307,15 @@
       var list = e.target.closest && e.target.closest('.qb-mlist');
       if (!list || e.target.tagName === 'INPUT') return;
       document.body.classList.add('qb-chat-open');
+    });
+    // Settings on phones: nav card is the hub; tapping an item opens its panel
+    document.addEventListener('click', function (e) {
+      if (window.innerWidth > 600) return;
+      if ((window.__QB_SCREEN || '') !== 'account') return;
+      var item = e.target.closest && e.target.closest('.qb-navitem');
+      if (!item) return;
+      if (/Log Out/.test(item.textContent || '')) return;
+      setTimeout(function () { document.body.classList.add('qb-acct-open'); }, 60);
     });
   }
 
@@ -607,7 +627,23 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); }
+  // phone settings: back affordance above the panel (foreign node ADDs are
+  // safe with the engine's morph; removals are not)
+  function acctBack() {
+    if ((window.__QB_SCREEN || '') !== 'account') return;
+    if (document.querySelector('.qb-acct-back')) return;
+    var content = document.querySelector('[style*="flex: 3 1 460px"]');
+    if (!content || !content.parentElement) return;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'qb-acct-back';
+    b.innerHTML = '‹&nbsp; Settings';
+    b.addEventListener('click', function () { document.body.classList.remove('qb-acct-open'); });
+    content.parentElement.insertBefore(b, content);
+    if (window.__QB_WALLET) document.body.classList.add('qb-acct-open');
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); acctBack(); }
 
   function start() {
     apply();

@@ -183,7 +183,15 @@
       + trow('Neutrogena Cream', 'Farah M.', 'June 2, 2026', 'PayPal', 'Pending', 'rgb(243,128,87)', 'QAR 60.00')
       + trow('BMW 320d Touring M-Sport', 'Omar K.', 'May 28, 2026', 'QNB', 'Complete', 'rgb(27,173,7)', 'QAR 330.00')
       + '</div>';
-    content.innerHTML = '';
+    // never remove/reorder engine-managed children (its morph crashes on
+    // missing nodes) — hide them via a class and append our panel alongside
+    content.classList.add('qb-wallet-host');
+    if (!document.getElementById('qb-wallet-css')) {
+      var wst = document.createElement('style');
+      wst.id = 'qb-wallet-css';
+      wst.textContent = '.qb-wallet-host > :not(.qb-wallet-panel){display:none !important}';
+      document.head.appendChild(wst);
+    }
     content.appendChild(panel);
     // highlight Wallet in the settings nav
     var w = [].find.call(document.querySelectorAll('*'), function (e) {
