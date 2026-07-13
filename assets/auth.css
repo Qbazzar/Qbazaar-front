@@ -9,6 +9,7 @@
   --line: #EDEDED;
   --label: #4B4B4B;
 }
+a { color: inherit; }
 body {
   font-family: 'Poppins', sans-serif;
   background: #f9f9f9;

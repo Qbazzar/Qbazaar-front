@@ -30,7 +30,13 @@
   var st = document.createElement('style'); st.textContent = CSS;
   (document.head || document.documentElement).appendChild(st);
 
-  var ICON = { ok: '✓', bad: '✕', wait: '↔', gone: '⏱' };
+  var _svg = function (p) { return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px">' + p + '</svg>'; };
+  var ICON = {
+    ok: _svg('<path d="m4.5 12.5 5 5 10-11"/>'),
+    bad: _svg('<path d="m6 6 12 12M18 6 6 18"/>'),
+    wait: _svg('<path d="M4 7h13l-3-3M20 17H7l3 3"/>'),
+    gone: _svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>')
+  };
 
   function esc(x) { return String(x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 

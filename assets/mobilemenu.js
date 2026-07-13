@@ -1,4 +1,4 @@
-﻿/* Q Bazaar â€” mobile navigation drawer (Figma mobile layout).
+/* Q Bazaar â€” mobile navigation drawer (Figma mobile layout).
    On phones the header's icon cluster is hidden and a hamburger opens a slide-in
    drawer with the full navigation (Home, Categories, Favorites, Messages, Saved
    Search, My Ads, Sales Overview, Account Settings, Wallet, Log Out) plus an
@@ -32,16 +32,16 @@
     + '.qb-burger{display:none;position:fixed;top:14px;right:16px;z-index:99990;width:44px;height:44px;'
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
     +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06)}'
-    + '.qb-burger span{position:relative;width:20px;height:2px;background:#2b2b2b;border-radius:2px;transition:.2s}'
-    + '.qb-burger span::before,.qb-burger span::after{content:"";position:absolute;left:0;width:20px;height:2px;background:#2b2b2b;border-radius:2px;transition:.2s}'
+    + '.qb-burger span{position:relative;width:20px;height:2px;background:#212121;border-radius:2px;transition:.2s}'
+    + '.qb-burger span::before,.qb-burger span::after{content:"";position:absolute;left:0;width:20px;height:2px;background:#212121;border-radius:2px;transition:.2s}'
     + '.qb-burger span::before{top:-6px}.qb-burger span::after{top:6px}'
     + '.qb-mbell{display:none;position:fixed;top:14px;right:68px;z-index:99990;width:44px;height:44px;'
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
-    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);text-decoration:none;color:#2b2b2b;position:fixed}'
+    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);text-decoration:none;color:#212121;position:fixed}'
     + '.qb-mbell .dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:' + ORANGE + '}'
     + '.qb-mglobe{display:none;position:fixed;top:14px;right:120px;z-index:99990;width:44px;height:44px;'
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
-    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#2b2b2b}'
+    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#212121}'
     + '.qb-langpop{display:none;position:fixed;top:64px;right:16px;z-index:99993;width:210px;background:#fff;'
     +   'border:1px solid rgb(237,237,237);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.18);padding:8px;font-family:Poppins}'
     + '.qb-langpop.open{display:block}'
@@ -67,7 +67,7 @@
     +   'text-decoration:none;font:500 15px Poppins;margin-bottom:2px}'
     + '.qb-mnav a .ic{display:flex;flex:0 0 auto}'
     + '.qb-mnav a .lbl{flex:1}'
-    + '.qb-mnav a .chev{color:#c8c8c8}'
+    + '.qb-mnav a .chev{color:#A19F9F}'
     + '.qb-mnav a:hover{background:rgb(250,250,250)}'
     + '.qb-mnav a.is-active{background:' + ORANGE + ';color:#fff}'
     + '.qb-mnav a.is-active .chev{color:rgba(255,255,255,.8)}'
@@ -582,7 +582,32 @@
     }
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); }
+  // Residual emoji glyphs -> design-style line icons (gallery counter camera,
+  // location pins, standalone checkmarks). Leaf-swap with loop guards.
+  var EMOJI_SVG = {
+    '🖻': '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:inline-block;vertical-align:-2px"><rect x="3" y="6.5" width="18" height="13" rx="3"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6.5 10 4h4l1.5 2.5"/></svg>',
+    '📍': '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:inline-block;vertical-align:-1px"><path d="M20 10c0 6-8 11-8 11s-8-5-8-11a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+    '✓': '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-1px"><path d="m4.5 12.5 5 5 10-11"/></svg>'
+  };
+  function emojiSwap() {
+    var els = document.querySelectorAll('div, span, b, strong, p, a, li, small, h1, h2, h3, h4');
+    for (var i = 0; i < els.length; i++) {
+      var e = els[i];
+      if (e.children.length !== 0 || e.dataset.qbEsw) continue;
+      if (e.closest && e.closest('[data-qb-esw]')) continue;
+      var t = e.textContent || '';
+      if (t.length > 90) continue;
+      var hit = null;
+      for (var k in EMOJI_SVG) if (t.indexOf(k) !== -1) { hit = k; break; }
+      if (!hit) continue;
+      e.dataset.qbEsw = '1';
+      var rest = t.split(hit).join('').replace(/️/g, '').trim();
+      e.textContent = '';
+      e.innerHTML = EMOJI_SVG[hit] + (rest ? '<span> ' + rest.replace(/</g, '&lt;') + '</span>' : '');
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); }
 
   function start() {
     apply();

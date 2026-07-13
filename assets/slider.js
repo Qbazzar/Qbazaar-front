@@ -4,7 +4,7 @@
   var CSS = ''
     + '.qb-slide-host{position:relative}'
     + '.qb-slide-btn{position:absolute;top:78px;transform:translateY(-50%);z-index:6;width:42px;height:42px;'
-    +   'border-radius:50%;border:1px solid #ececec;background:#fff;color:#2b2b2b;font:400 24px/1 system-ui;'
+    +   'border-radius:50%;border:1px solid #F38057;background:#fff;color:#F38057;font:400 24px/1 Poppins,sans-serif;'
     +   'cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;'
     +   'transition:background .15s,color .15s,opacity .15s}'
     + '.qb-slide-btn:hover{background:#f38057;color:#fff;border-color:#f38057}'
@@ -47,8 +47,12 @@
     var prev = document.createElement('button');
     var next = document.createElement('button');
     prev.type = next.type = 'button';
-    prev.className = 'qb-slide-btn qb-slide-prev'; prev.innerHTML = '‹'; prev.setAttribute('aria-label', 'Previous');
-    next.className = 'qb-slide-btn qb-slide-next'; next.innerHTML = '›'; next.setAttribute('aria-label', 'Next');
+    var ARROW = function (dir) {
+      return '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+        + (dir < 0 ? '<path d="M20 12H4M10 6l-6 6 6 6"/>' : '<path d="M4 12h16M14 6l6 6-6 6"/>') + '</svg>';
+    };
+    prev.className = 'qb-slide-btn qb-slide-prev'; prev.innerHTML = ARROW(-1); prev.setAttribute('aria-label', 'Previous');
+    next.className = 'qb-slide-btn qb-slide-next'; next.innerHTML = ARROW(1); next.setAttribute('aria-label', 'Next');
     prev.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); track.scrollBy({ left: -step(track), behavior: 'smooth' }); });
     next.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); track.scrollBy({ left: step(track), behavior: 'smooth' }); });
     host.appendChild(prev); host.appendChild(next);
