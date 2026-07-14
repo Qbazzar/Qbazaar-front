@@ -210,10 +210,35 @@
     var navItem = w && w.closest('.qb-navitem');
     if (!navItem) return;
     document.querySelectorAll('.qb-navitem-active').forEach(function (x) {
-      if (x !== navItem) x.classList.remove('qb-navitem-active');
+      if (x === navItem) return;
+      x.classList.remove('qb-navitem-active');
+      // the engine also paints the active item's text white INLINE — clear it,
+      // otherwise the item becomes white-on-white (invisible but taking space)
+      x.style.color = '';
+      [].forEach.call(x.querySelectorAll('*'), function (c) {
+        if (c.style && /255,\s*255,\s*255|#fff/i.test(c.style.color || '')) c.style.color = '';
+      });
     });
     navItem.classList.add('qb-navitem-active');
   }
+  // on the wallet page, choosing another settings item exits wallet mode and
+  // lets the engine switch its own panel natively
+  document.addEventListener('click', function (e) {
+    if (!window.__QB_WALLET) return;
+    var item = e.target.closest && e.target.closest('.qb-navitem');
+    if (!item) return;
+    var t = (item.textContent || '').trim();
+    if (/^Wallet\b/.test(t) || /Log Out/.test(t)) return;
+    window.__QB_WALLET = 0;
+    var host = document.querySelector('.qb-wallet-host');
+    if (host) host.classList.remove('qb-wallet-host');
+    var panel = document.querySelector('.qb-wallet-panel');
+    if (panel) panel.remove();
+    // hand the highlight back to the engine: only the clicked item stays lit
+    document.querySelectorAll('.qb-navitem-active').forEach(function (x) {
+      if (x !== item) x.classList.remove('qb-navitem-active');
+    });
+  });
   // settings-nav Wallet item navigates to the wallet page
   document.addEventListener('click', function (e) {
     var t = e.target;
