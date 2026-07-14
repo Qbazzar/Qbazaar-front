@@ -47,6 +47,13 @@ button[style*="background: rgb(243, 128, 87)"]:hover,
 /* utility chrome inherits the brand font */
 .qb-mdrawer-x, .qb-langpop, .qb-langpop * { font-family: 'Poppins', sans-serif; }
 
+/* ---- settings nav: active item is always white text+icon (engine does
+   this inline for its own item; the CSS makes it timing-proof for ours) --- */
+.qb-navitem-active,
+.qb-navitem-active * {
+  color: #fff !important;
+}
+
 /* ---- toasts: the design's notification bar (401:13703) is a mint-green
    TOP-CENTER banner 574x62 r14 with 20px green text — not a dark bottom pill */
 [style*="position: fixed"][style*="bottom: 28px"][style*="background: rgb(35, 31, 32)"] {

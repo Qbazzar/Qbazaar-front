@@ -220,6 +220,13 @@
       });
     });
     navItem.classList.add('qb-navitem-active');
+    // engine actives are white text+icon; mirror that exactly
+    navItem.style.color = '#fff';
+    [].forEach.call(navItem.querySelectorAll('*'), function (c) {
+      if (!c.style) return;
+      c.style.color = '#fff';
+      if (c.tagName === 'svg' || c.ownerSVGElement) c.style.stroke = '#fff';
+    });
   }
   // on the wallet page, choosing another settings item goes back to the real
   // account page and auto-opens that item there — the engine then owns the
