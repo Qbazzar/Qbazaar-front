@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Q Bazaar — Flexible Financing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/auth.css?v=1">
+<style>
+.fin-wrap { width: 100%; max-width: 1160px; margin: 0 auto; }
+.crumb { font: 500 14px Poppins; color: #a19f9f; margin: 26px 0 8px; }
+.crumb b { color: #212121; font-weight: 600; }
+.fin-hero { background: #fff; border-radius: 16px; box-shadow: 0 4px 40px rgba(161,161,161,.15); padding: 34px 40px; margin-top: 14px; }
+.fin-hero h1 { font: 600 40px/1.2 Poppins; color: #212121; }
+.fin-hero p { font: 400 18px/1.6 Poppins; color: #a19f9f; margin-top: 10px; }
+.fin-sec { font: 600 24px Poppins; color: #212121; margin: 34px 0 14px; }
+.fin-card { background: #fff; border-radius: 16px; box-shadow: 0 4px 40px rgba(161,161,161,.15); padding: 26px 30px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+.fin-card img { width: 280px; height: 180px; object-fit: cover; border-radius: 12px; flex: 0 0 auto; }
+.fin-card .inf { flex: 1 1 320px; min-width: 0; }
+.fin-card h3 { font: 600 20px Poppins; color: #212121; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.fin-card h3 span { color: #212121; white-space: nowrap; }
+.fin-card .desc { font: 400 16px/1.6 Poppins; color: #999; margin-top: 8px; }
+.chips { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.chips span { background: #f5f5f5; border-radius: 6px; padding: 5px 12px; font: 500 12px Poppins; color: #777; }
+.loc { font: 400 14px Poppins; color: #a19f9f; margin-top: 12px; }
+.fin-form { background: #fff; border-radius: 16px; box-shadow: 0 4px 40px rgba(161,161,161,.15); padding: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; }
+.fin-note { grid-column: 1 / -1; text-align: center; margin-bottom: 8px; }
+.fin-note .free { font: 400 16px Poppins; color: #3dbe64; }
+.fin-note h4 { font: 600 22px/1.4 Poppins; color: #212121; margin-top: 6px; }
+.fin-cta { grid-column: 1 / -1; margin-top: 18px; }
+footer.fin { text-align: center; padding: 22px; font: 600 13px Poppins; color: #F38057; background: #fff; box-shadow: 0 -2px 12px rgba(161,161,161,.12); }
+@media (max-width: 700px) { .fin-form { grid-template-columns: 1fr; } .fin-hero h1 { font-size: 28px; } .fin-hero { padding: 24px 20px; } }
+</style>
+</head>
+<body>
+<header class="qb-ahead">
+  <a href="index.html"><img src="assets/qb-logo.png" alt="Q Bazaar"></a>
+  <button type="button" class="qb-lang"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>EN <span style="color:#c2c2c2">▾</span></button>
+</header>
+<main style="align-items:flex-start">
+  <div class="fin-wrap">
+    <div class="crumb">Home &nbsp;&gt;&nbsp; Car &amp; Vehicles &nbsp;&gt;&nbsp; Cars &nbsp;&gt;&nbsp; BMWM3 Competition.. &nbsp;&gt;&nbsp; <b>Financing</b></div>
+    <div class="fin-hero">
+      <h1>Flexible Financing</h1>
+      <p>Compare and apply for affordable auto loans with competitive rates and zero commitment.</p>
+    </div>
+
+    <div class="fin-sec">Product</div>
+    <div class="fin-card">
+      <img src="images/f579824766e8b1ac03bac8938d657d6e73222208" alt="BMW 320d Touring">
+      <div class="inf">
+        <h3>BMW 320d Touring M-Sport | HUD | Pano <span>QAR 287,000</span></h3>
+        <div class="desc">Beautifully maintained touring with M-Sport package, Head-Up display and panoramic roof.</div>
+        <div class="chips"><span>2019</span><span>68.000 km</span><span>Diesel</span><span>Auto</span></div>
+        <div class="loc">📍&#xFE0E; Doha • 30 Min. ago</div>
+      </div>
+    </div>
+
+    <div class="fin-sec">Finance Details</div>
+    <form class="fin-form" action="product.html" method="get">
+      <div class="fin-note">
+        <span class="free">Free &amp; non-binding</span>
+        <h4>Cheap loans - guaranteed!<br>Find out your personal monthly installment</h4>
+      </div>
+      <div class="qb-field">
+        <label>Desired Amount <b>*</b></label>
+        <input type="text" placeholder="00.00" required>
+      </div>
+      <div class="qb-field">
+        <label>Purpose of use <b>*</b></label>
+        <select><option>Selected option</option><option>New car purchase</option><option>Used car purchase</option><option>Refinancing</option></select>
+      </div>
+      <div class="qb-field">
+        <label>Net loan amount <b>*</b></label>
+        <select><option>Selected option</option><option>QAR 50,000</option><option>QAR 100,000</option><option>QAR 200,000</option><option>QAR 287,000</option></select>
+      </div>
+      <div class="qb-field">
+        <label>Loan term / duration <b>*</b></label>
+        <select><option>Selected option</option><option>12 months</option><option>24 months</option><option>36 months</option><option>48 months</option><option>60 months</option></select>
+      </div>
+      <button type="submit" class="qb-btn fin-cta" style="max-width:420px;margin-left:auto;margin-right:auto">Start loan comparison now</button>
+    </form>
+    <div style="height:40px"></div>
+  </div>
+</main>
+<footer class="fin">Q BAZAAR &nbsp;·&nbsp; © Q BAZZAR Inc. All rights revered</footer>
+</body>
+</html>
