@@ -47,6 +47,36 @@ button[style*="background: rgb(243, 128, 87)"]:hover,
 /* utility chrome inherits the brand font */
 .qb-mdrawer-x, .qb-langpop, .qb-langpop * { font-family: 'Poppins', sans-serif; }
 
+/* ---- toasts: the design's notification bar (401:13703) is a mint-green
+   TOP-CENTER banner 574x62 r14 with 20px green text — not a dark bottom pill */
+[style*="position: fixed"][style*="bottom: 28px"][style*="background: rgb(35, 31, 32)"] {
+  bottom: auto !important;
+  top: 92px !important;
+  background: rgb(234, 255, 247) !important;
+  color: rgb(7, 189, 116) !important;
+  border-radius: 14px !important;
+  font-size: 20px !important;
+  min-height: 62px;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 44px !important;
+  max-width: min(574px, 92vw);
+  box-shadow: 0 4px 40px rgba(161, 161, 161, .2) !important;
+}
+[style*="position: fixed"][style*="bottom: 28px"][style*="background: rgb(35, 31, 32)"] * {
+  color: rgb(7, 189, 116) !important;
+}
+@media (max-width: 600px) {
+  [style*="position: fixed"][style*="bottom: 28px"][style*="background: rgb(35, 31, 32)"] {
+    top: 84px !important;
+    font-size: 15px !important;
+    min-height: 52px;
+    padding: 12px 20px !important;
+    width: 92vw;
+  }
+}
+
 /* ---- feature checkmarks: design tick-circle green rgb(0,195,91)
    with gray 16px labels (vuesax/bold/tick-circle on 88:776) ---- */
 svg[fill="rgb(27,173,7)"] { fill: rgb(0, 195, 91) !important; }
