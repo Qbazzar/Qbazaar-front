@@ -44,6 +44,17 @@ footer [style*="font-size: 22px"] { font-size: 24px !important; }
 [style*="font-size: 15px"][style*="rgba(161, 161, 161, 0.1)"] { font-size: 20px !important; }
 
 /* ---- product page (88:776) ----------------------------------- */
+/* title + price share one row at every width (price never wraps under) */
+html[data-screen="product"] [style*="justify-content: space-between"][style*="gap: 20px"][style*="flex-wrap: wrap"] {
+  flex-wrap: nowrap !important;
+}
+html[data-screen="product"] [style*="justify-content: space-between"][style*="gap: 20px"][style*="flex-wrap: wrap"] > :last-child {
+  flex-shrink: 0;
+}
+/* phone frame 618:27221 has no breadcrumbs */
+@media (max-width: 600px) {
+  html[data-screen="product"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"] { display: none !important; }
+}
 html[data-screen="product"] [style*="font-size: 28px"] { font-size: 24px !important; }
 html[data-screen="product"] [style*="font-size: 20px"][style*="font-weight: 600"] {
   font-size: 22px !important;
@@ -107,3 +118,9 @@ html[data-screen="notifications"] [style*="font-size: 16px"] { font-size: 14px !
 html[data-screen="checkout"] [style*="font-weight: 500"][style*="color: rgb(33, 33, 33)"] {
   font-weight: 600 !important;
 }
+
+/* ---- home hero select labels: 20px on desktop (single line),
+   14px on tablets — per 728:44663 / 561:22024 -------------------- */
+.qb-hlabel { white-space: nowrap; }
+@media (min-width: 1001px) { .qb-hlabel { font-size: 20px !important; } }
+@media (min-width: 601px) and (max-width: 1000px) { .qb-hlabel { font-size: 14px !important; } }

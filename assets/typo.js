@@ -18,9 +18,9 @@
     'Message': { fw: '500', btn: 1 },
     'Info': { fw: '500', btn: 1 },
     'Apply Filter': { fw: '500', btn: 1 },
-    'Choose Category': { fs: '20px' },
-    'Location': { fs: '20px' },
-    'Distance': { fs: '20px' },
+    'Choose Category': { hlabel: 1 },
+    'Location': { hlabel: 1 },
+    'Distance': { hlabel: 1 },
     'Buy Now': { fs: '14px', fw: '500', btn: 1 },
     'Make an Offer': { fs: '14px', fw: '500', btn: 1 },
     'Send Message': { fs: '14px', fw: '500', btn: 1 },
@@ -64,6 +64,11 @@
       var x = EXACT[t];
       if (x) {
         if (x.btn && !e.closest('button, a, [style*="cursor: pointer"]')) continue;
+        // hero search select labels only (they live inside a [data-qbsel] trigger)
+        if (x.hlabel) {
+          if (e.closest('[data-qbsel]')) e.classList.add('qb-hlabel');
+          continue;
+        }
         if (x.fs) put(e, 'font-size', x.fs);
         if (x.fw) put(e, 'font-weight', x.fw);
       }
