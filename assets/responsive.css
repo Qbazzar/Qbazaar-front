@@ -351,3 +351,9 @@ img, svg, video { max-width: 100%; }
   html[data-screen="checkout"] .qb-crumbs { display: none !important; }
   html[data-screen="checkout"] .qb-chk-title { display: block !important; }
 }
+
+/* qb-hero-phone-fix — home hero per 584:25249: title 24px on ONE line, sub 14px */
+@media (max-width: 600px) {
+  html[data-screen="home"] [style*="font-size: clamp(30px, 5vw, 48px)"] { font-size: 24px !important; }
+  html[data-screen="home"] [style*="font-size: clamp(16px, 2.2vw, 24px)"] { font-size: 14px !important; }
+}

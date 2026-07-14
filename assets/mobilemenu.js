@@ -42,15 +42,20 @@
     + '.qb-mglobe{display:none;position:fixed;top:14px;right:120px;z-index:99990;width:44px;height:44px;'
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
     +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);color:#212121}'
-    + '.qb-langpop{display:none;position:fixed;top:64px;right:16px;z-index:99993;width:210px;background:#fff;'
-    +   'border:1px solid rgb(237,237,237);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.18);padding:8px;font-family:Poppins}'
+    /* language picker per Figma 741:39398: dark 16px title, tiny country
+       code + name per row, radio on the RIGHT (no tinted selected row) */
+    + '.qb-langpop{display:none;position:fixed;top:64px;right:16px;z-index:99993;width:262px;background:#fff;'
+    +   'border:1px solid rgb(237,237,237);border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.18);padding:6px 0 8px;font-family:Poppins}'
     + '.qb-langpop.open{display:block}'
-    + '.qb-langpop h4{font:600 11px Poppins;letter-spacing:.06em;text-transform:uppercase;color:#999;padding:6px 10px;margin:0}'
-    + '.qb-langpop button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:9px 10px;'
-    +   'border-radius:9px;cursor:pointer;font:500 14px Poppins;color:#333;text-align:left}'
+    + '.qb-langpop h4{font:600 16px Poppins;color:#212121;padding:12px 18px 10px;margin:0;'
+    +   'border-bottom:1px solid rgb(243,243,243)}'
+    + '.qb-langpop button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:11px 18px;'
+    +   'cursor:pointer;font:400 15px Poppins;color:#212121;text-align:left}'
     + '.qb-langpop button:hover{background:rgb(250,250,250)}'
-    + '.qb-langpop button.on{background:rgb(255,240,234);color:' + ORANGE + '}'
-    + '.qb-langpop .flag{font-size:16px}'
+    + '.qb-langpop .code{font:500 10px Poppins;letter-spacing:.04em;color:#9e9e9e;min-width:20px}'
+    + '.qb-langpop .rad{margin-left:auto;width:18px;height:18px;border-radius:50%;'
+    +   'border:1.5px solid rgb(203,203,203);flex-shrink:0}'
+    + '.qb-langpop button.on .rad{border:5px solid ' + ORANGE + '}'
     + '@media (max-width:760px){ .qb-mbell,.qb-mglobe{display:flex} }'
     + '.qb-mdrawer-back{position:fixed;inset:0;background:rgba(20,20,20,.45);z-index:99991;opacity:0;pointer-events:none;transition:opacity .25s}'
     + '.qb-mdrawer{position:fixed;top:0;left:0;bottom:0;z-index:99992;width:86vw;max-width:340px;background:#fff;'
@@ -183,13 +188,13 @@
     bell.innerHTML = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' + I.bell + '</svg><span class="dot"></span>';
 
     // globe -> language picker (matches Figma mobile header)
-    var LANGS = [['English', 'ًں‡¬ًں‡§'], ['Arabic', 'ًں‡¸ًں‡¦'], ['India', 'ًں‡®ًں‡³'], ['Urdu', 'ًں‡µًں‡°'], ['Bengali', 'ًں‡§ًں‡©'], ['Tagalog', 'ًں‡µًں‡­'], ['Persian (Farsi)', 'ًں‡®ًں‡·'], ['Tamil', 'ًں‡®ًں‡³']];
+    var LANGS = [['English', 'GB'], ['Arabic', 'QA'], ['India', 'IN'], ['Urdu', 'PK'], ['Malayalam', 'IN'], ['Bengali', 'BD'], ['Tagalog', 'PH'], ['Persian (Farsi)', 'IR'], ['Tamil', 'IN']];
     var globe = document.createElement('button');
     globe.id = 'qb-mglobe'; globe.className = 'qb-mglobe'; globe.setAttribute('aria-label', 'Language');
     globe.innerHTML = '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>';
     var pop = document.createElement('div'); pop.className = 'qb-langpop';
     pop.innerHTML = '<h4>Choose your language</h4>' + LANGS.map(function (l, i) {
-      return '<button data-lang="' + l[0] + '"' + (i === 0 ? ' class="on"' : '') + '><span class="flag">' + l[1] + '</span>' + l[0] + '</button>';
+      return '<button data-lang="' + l[0] + '"' + (i === 0 ? ' class="on"' : '') + '><span class="code">' + l[1] + '</span>' + l[0] + '<span class="rad"></span></button>';
     }).join('');
     globe.addEventListener('click', function (e) { e.stopPropagation(); pop.classList.toggle('open'); });
     pop.addEventListener('click', function (e) {
@@ -671,7 +676,55 @@
     if (window.__QB_WALLET) document.body.classList.add('qb-acct-open');
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); acctBack(); }
+  // Parent category on phones (623:28688): no breadcrumbs, and the action
+  // row is a Filter button + heart/search circles instead of two wide pills.
+  function catParentCompact() {
+    if ((window.__QB_SCREEN || '') !== 'catParent') return;
+    if (!document.getElementById('qb-catparent-css')) {
+      var st = document.createElement('style');
+      st.id = 'qb-catparent-css';
+      st.textContent = '.qb-cp-row{display:none}'
+        + '@media (max-width:600px){'
+        +   'html[data-screen="catParent"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"]{display:none !important}'
+        +   '.qb-cp-hide{display:none !important}'
+        +   '.qb-cp-row{display:flex;align-items:center;gap:10px;margin:2px 0 4px;font-family:Poppins;width:100%;flex:1 1 100%}'
+        +   '.qb-cp-row .btn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgb(237,237,237);'
+        +     'border-radius:12px;padding:11px 16px;font:500 14px Poppins;color:#212121;cursor:pointer}'
+        +   '.qb-cp-row .sp{flex:1}'
+        +   '.qb-cp-row .ic{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgb(237,237,237);'
+        +     'display:flex;align-items:center;justify-content:center;cursor:pointer}'
+        + '}';
+      (document.head || document.documentElement).appendChild(st);
+    }
+    var fav = [].find.call(document.querySelectorAll('button'), function (e) {
+      return /Add to Favorite/.test(e.textContent || '');
+    });
+    if (!fav || !fav.parentElement) return;
+    var row = fav.parentElement;
+    row.classList.add('qb-cp-hide');
+    if (row.parentElement.querySelector('.qb-cp-row')) return;
+    var r = document.createElement('div');
+    r.className = 'qb-cp-row';
+    r.innerHTML = '<button type="button" class="btn">Filter '
+      + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M7 12h10M10 17h4"/></svg></button>'
+      + '<span class="sp"></span>'
+      + '<button type="button" class="ic" data-cp="fav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
+      + '<button type="button" class="ic" data-cp="search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>';
+    r.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-cp]');
+      if (!b) return;
+      if (b.getAttribute('data-cp') === 'fav') fav.click();
+      else {
+        var save = [].find.call(document.querySelectorAll('button'), function (x) {
+          return /Save Search/.test(x.textContent || '');
+        });
+        if (save) save.click();
+      }
+    });
+    row.parentElement.insertBefore(r, row);
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); acctBack(); catParentCompact(); }
 
   function start() {
     apply();
