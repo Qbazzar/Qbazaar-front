@@ -443,12 +443,18 @@
     var name = (bar.textContent || '').trim().split(/\s/)[0] || 'BT';
     var caps = name.match(/[A-Z]/g) || [];
     var initials = (caps.length >= 2 ? caps.slice(0, 2).join('') : name.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase()) || 'BT';
-    // reuse one of the page's own card photos for the cover
+    // organizations get the design's own cover photo + logo (145:1063);
+    // individual sellers have no cover photo in the file — gradient stays
+    var isOrg = /Org/.test(window.__QB_SCREEN || '') || name === 'BonTon';
     var cover = '';
-    var ph = [].find.call(document.querySelectorAll('.qb-ph'), function (e) {
-      return /url\(/.test((e.getAttribute('style') || '') + getComputedStyle(e).backgroundImage);
-    });
-    if (ph) { var m = /url\(["']?([^"')]+)/.exec(getComputedStyle(ph).backgroundImage); if (m) cover = m[1]; }
+    if (isOrg) {
+      cover = 'images/e9ffdf647df8047be345c2f1d5dee73d295d7595.jpg';
+    } else {
+      var ph = [].find.call(document.querySelectorAll('.qb-ph'), function (e) {
+        return /url\(/.test((e.getAttribute('style') || '') + getComputedStyle(e).backgroundImage);
+      });
+      if (ph) { var m = /url\(["']?([^"')]+)/.exec(getComputedStyle(ph).backgroundImage); if (m) cover = m[1]; }
+    }
     var cv = document.createElement('div');
     cv.className = 'qb-scover';
     cv.setAttribute('style', 'height:190px;border-radius:16px 16px 0 0;margin:0;'
@@ -461,10 +467,31 @@
     av.setAttribute('style', 'width:96px;height:96px;border-radius:50%;background:#fff;border:4px solid #fff;'
       + 'box-shadow:0 4px 25px rgba(188,188,188,.3);display:flex;align-items:center;justify-content:center;'
       + 'font:600 26px Poppins;color:rgb(120,120,120);margin-top:-64px;flex:0 0 auto');
-    av.textContent = initials;
+    if (isOrg) {
+      av.style.backgroundImage = 'url("images/ba66ee5b2d23dcafe36b29a9c1859b38fb8c6647.jpg")';
+      av.style.backgroundSize = 'cover';
+      av.style.backgroundPosition = 'center';
+    } else {
+      av.textContent = initials;
+    }
     bar.insertBefore(av, bar.firstChild);
     bar.style.alignItems = 'center';
     bar.style.gap = '18px';
+    // design header: name on top, stats right under it (one column), buttons right
+    bar.classList.add('qb-sbar');
+    if (!document.getElementById('qb-sbar-css')) {
+      var sst = document.createElement('style');
+      sst.id = 'qb-sbar-css';
+      sst.textContent = '@media (min-width:601px){'
+        + '.qb-sbar{display:grid !important;grid-template-columns:auto 1fr auto;'
+        +   "grid-template-areas:'av nm bt' 'av st bt';column-gap:18px;align-items:center}"
+        + '.qb-sbar > .qb-savatar{grid-area:av}'
+        + '.qb-sbar > .qb-savatar + div{grid-area:nm;align-self:end}'
+        + '.qb-sbar > .qb-sstats{grid-area:st;align-self:start}'
+        + '.qb-sbar > :last-child{grid-area:bt}'
+        + '}';
+      (document.head || document.documentElement).appendChild(sst);
+    }
     var nameEl = [].find.call(bar.querySelectorAll('*'), function (e) {
       return e.childElementCount <= 1 && (e.textContent || '').trim() === name;
     });

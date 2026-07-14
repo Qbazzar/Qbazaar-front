@@ -301,7 +301,23 @@
     }
   }, true);
 
-  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); walletize(); walletNav(); }
+  // product meta rows (location / since / views / verified) use neutral gray
+  // icons in the design (88:776) — the engine paints them orange/green
+  function metaIcons() {
+    if ((window.__QB_SCREEN || '') !== 'product') return;
+    var rows = document.querySelectorAll('[style*="gap: 10px"]');
+    for (var i = 0; i < rows.length; i++) {
+      var t = (rows[i].textContent || '').trim();
+      if (t.length > 60) continue;
+      if (!/^(Doha, Qatar|Since |[\d,]+ Views|Verified Ad)/.test(t)) continue;
+      var svg = rows[i].querySelector('svg');
+      if (svg && svg.getAttribute('stroke') !== 'rgb(158,158,158)') {
+        svg.setAttribute('stroke', 'rgb(158,158,158)');
+      }
+    }
+  }
+
+  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); walletize(); walletNav(); metaIcons(); }
   run();
   new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();
