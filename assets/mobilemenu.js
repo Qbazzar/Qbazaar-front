@@ -403,12 +403,11 @@
     var avatar = fa.parentElement;
     var host = avatar.parentElement;
     var btns = host.querySelector('.qb-guest-btns');
+    avatar.style.display = ''; // avatar (and its dashboard menu) always visible
     if (authed) {
-      avatar.style.display = '';
       if (btns) btns.remove();
       return;
     }
-    avatar.style.display = 'none';
     if (btns) return;
     btns = document.createElement('span');
     btns.className = 'qb-guest-btns';
