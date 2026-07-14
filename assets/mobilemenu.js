@@ -1,8 +1,8 @@
-/* Q Bazaar â€” mobile navigation drawer (Figma mobile layout).
+/* Q Bazaar — mobile navigation drawer (Figma mobile layout).
    On phones the header's icon cluster is hidden and a hamburger opens a slide-in
    drawer with the full navigation (Home, Categories, Favorites, Messages, Saved
    Search, My Ads, Sales Overview, Account Settings, Wallet, Log Out) plus an
-   Add Ads button â€” matching the Figma "Menu" screens. Pure HTML/CSS/JS, links to
+   Add Ads button — matching the Figma "Menu" screens. Pure HTML/CSS/JS, links to
    the existing page files. Re-applies after the engine's re-renders. */
 (function () {
   var I = {
@@ -217,7 +217,9 @@
       + '<button class="qb-mdrawer-x" aria-label="Close">&times;</button></div>'
       + '<div class="qb-mdrawer-hd">Menu</div>'
       + '<div class="qb-mnav">' + links + '</div>'
-      + '<div class="qb-mdrawer-ft"><a href="add-ads.html">ï¼‹ Add Ads</a></div>';
+      + '<div class="qb-mdrawer-ft"><a href="add-ads.html">'
+      + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px"><path d="M12 5v14M5 12h14"/></svg>'
+      + 'Add Ads</a></div>';
     drawer.querySelector('.qb-mdrawer-x').addEventListener('click', function () { setOpen(false); });
 
     document.body.appendChild(back);
@@ -283,7 +285,7 @@
     apply2.addEventListener('click', closeSheet);
     document.body.appendChild(back);
     document.body.appendChild(apply2);
-    // Open when the (otherwise inert) "Filter" button is tapped â€” via delegation,
+    // Open when the (otherwise inert) "Filter" button is tapped — via delegation,
     // so no per-element wiring and nothing to re-attach after a re-render.
     document.addEventListener('click', function (e) {
       if (!isPhone()) return;
@@ -471,7 +473,7 @@
       var stats = document.createElement('div');
       stats.className = 'qb-sstats';
       stats.setAttribute('style', 'font:400 15px Poppins;color:rgb(161,159,159);margin-top:5px');
-      stats.innerHTML = '8,429 <span style="color:#bdbdbd">Ads</span> &nbsp;â€¢&nbsp; 7,429 Followers &nbsp;â€¢&nbsp; <span style="color:rgb(61,190,100);font-weight:500">+2K Today</span>';
+      stats.innerHTML = '8,429 <span style="color:#bdbdbd">Ads</span> &nbsp;•&nbsp; 7,429 Followers &nbsp;•&nbsp; <span style="color:rgb(61,190,100);font-weight:500">+2K Today</span>';
       host.parentElement.insertBefore(stats, host.nextSibling);
     }
   }

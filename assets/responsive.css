@@ -1,5 +1,5 @@
 ﻿/* ============================================================
-   Q Bazaar â€” responsive layer + button normalisation.
+   Q Bazaar — responsive layer + button normalisation.
    Loaded AFTER styles.css so it can refine the captured design.
    The base design already flex-wraps; this file tightens buttons,
    guards against horizontal overflow, restacks the absolutely-
@@ -47,7 +47,7 @@ img, svg, video { max-width: 100%; }
     flex-direction: column;
     gap: 26px !important;
   }
-  /* in a column the children's flex-basis would become height â€” neutralise */
+  /* in a column the children's flex-basis would become height — neutralise */
   footer [style*="gap: 40px"][style*="space-between"] > * {
     flex: 0 0 auto !important;
     max-width: none !important;
@@ -60,7 +60,7 @@ img, svg, video { max-width: 100%; }
   main, section { min-width: 0; }
 }
 @media (min-width: 601px) and (max-width: 1000px) {
-  /* Home hero search: one pill row â€” fields + orange Search button inline */
+  /* Home hero search: one pill row — fields + orange Search button inline */
   form[style*="max-width: 1000px"] { flex-wrap: nowrap !important; padding: 6px 6px 6px 10px !important; }
   form[style*="max-width: 1000px"] > * { min-width: 0 !important; }
   form[style*="max-width: 1000px"] .qb-btn,
@@ -166,7 +166,7 @@ img, svg, video { max-width: 100%; }
   [style*="minmax(200px, 1fr)"] { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
   [style*="minmax(200px, 1fr)"] > * { min-width: 0 !important; }
 
-  /* Notification filter tabs (All / Price Change / Unread / â€¦): compact pills
+  /* Notification filter tabs (All / Price Change / Unread / …): compact pills
      in a single horizontally-scrollable row instead of wrapping. */
   [style*="border-radius: 40px"] { padding: 9px 16px !important; font-size: 13.5px !important; white-space: nowrap; }
   :has(> [style*="border-radius: 40px"]) {
@@ -200,7 +200,7 @@ img, svg, video { max-width: 100%; }
   }
 
   /* Notification cards: on a phone the design thumbnail is a narrow left rail,
-     not half the card â€” shrink the image so the text column gets real room and
+     not half the card — shrink the image so the text column gets real room and
      stops wrapping every word. Scoped to the notification row only. */
   [style*="min-height: 180px"][style*="border-radius: 24px"] { min-height: 128px !important; }
   [style*="min-height: 180px"][style*="border-radius: 24px"] > .qb-ph {
@@ -215,7 +215,7 @@ img, svg, video { max-width: 100%; }
   }
 
   /* Add-Ad "Select Category" modal: the 3-column miller picker is unusable at
-     phone width â€” stack the levels into one scrollable full-width column. */
+     phone width — stack the levels into one scrollable full-width column. */
   [style*="grid-template-columns: 1fr 1fr 1fr"][style*="min-height: 340px"] {
     grid-template-columns: 1fr !important;
     max-height: 66vh !important;
@@ -303,3 +303,51 @@ img, svg, video { max-width: 100%; }
   .qb-slide-next { right: 0; }
 }
 
+
+/* ============================================================
+   Add Ads phone layer — matches Figma 633:33029 / 638:35196.
+   The phone frames stack every field pair, shrink section titles
+   to 20px, compact the Category "Select" pill, put the profile
+   card's three actions on one row, and mark unselected boost
+   rows with the design's green tick-circle. */
+@media (max-width: 600px) {
+  html[data-screen="addads"] [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  html[data-screen="addads"] [style*="border-radius: 16px"][style*="padding: 28px"] {
+    padding: 20px !important;
+  }
+  html[data-screen="addads"] [style*="font-size: 24px"] {
+    font-size: 20px !important;
+  }
+  html[data-screen="addads"] [style*="align-items: stretch"][style*="gap: 12px"] {
+    align-items: center !important;
+  }
+  html[data-screen="addads"] button[style*="padding: 0px 26px"] {
+    padding: 9px 16px !important;
+    font-size: 12px !important;
+    border: 1px solid rgb(243, 128, 87) !important;
+    border-radius: 999px !important;
+  }
+  html[data-screen="addads"] span[style*="border: 2px solid rgb(203, 203, 203)"][style*="border-radius: 6px"] {
+    border: 0 !important;
+    width: 24px !important;
+    height: 24px !important;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2300C35B'/%3E%3Cpath d='M7 12.5l3.2 3.2L17 9' stroke='%23fff' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat !important;
+  }
+  html[data-screen="addads"] div[style*="flex-direction: column"][style*="gap: 12px"]:has(> button) {
+    flex-direction: row !important;
+  }
+  html[data-screen="addads"] div[style*="flex-direction: column"][style*="gap: 12px"] > button {
+    flex: 1 1 0;
+    padding: 12px 6px !important;
+    font-size: 14px !important;
+    white-space: nowrap;
+  }
+}
+
+/* checkout phone (710:34891): page title instead of breadcrumbs */
+@media (max-width: 600px) {
+  html[data-screen="checkout"] .qb-crumbs { display: none !important; }
+  html[data-screen="checkout"] .qb-chk-title { display: block !important; }
+}

@@ -17,6 +17,16 @@
     var title = leaf('Make an Offer');
     if (!title) return;
     document.body.dataset.qbBuynow = '1';
+    // phone frame 289 "buy-now-mobile": the product card sits ABOVE the form
+    document.documentElement.classList.add('qb-buynow-page');
+    if (!document.getElementById('qb-buynow-order-css')) {
+      var ost = document.createElement('style');
+      ost.id = 'qb-buynow-order-css';
+      ost.textContent = '@media (max-width:600px){'
+        + 'html.qb-buynow-page [style*="gap: 24px"][style*="flex-wrap: wrap"] > :nth-child(2){order:-1}'
+        + '}';
+      (document.head || document.documentElement).appendChild(ost);
+    }
     title.textContent = 'Buy Now';
     document.title = 'Q Bazaar — Buy Now';
     var crumb = [].filter.call(document.querySelectorAll('*'), function (e) {
@@ -85,6 +95,23 @@
       if (e.childElementCount !== 0) return;
       var t = (e.textContent || '').trim();
       if (MAP[t]) e.textContent = MAP[t];
+    });
+    // order card thumb = the Neutrogena product photo (710:34891).
+    // photos.js rewrites the inline style wholesale, so the pin must live
+    // in a stylesheet — CSS !important beats any later inline repaint.
+    if (!document.getElementById('qb-chk-thumb-css')) {
+      var tst = document.createElement('style');
+      tst.id = 'qb-chk-thumb-css';
+      tst.textContent = '.qb-ph[data-qb-chk-thumb]{'
+        + 'background-image:url("images/0e61e9a73417c33d21fe4954d2ed5396299705d5") !important;'
+        + 'background-size:cover !important;background-position:center !important}';
+      (document.head || document.documentElement).appendChild(tst);
+    }
+    [].forEach.call(document.querySelectorAll('.qb-ph'), function (ph) {
+      if (ph.getAttribute('data-qb-chk-thumb')) return;
+      var card = ph.parentElement;
+      if (!card || !/Neutrogena Cream/.test(card.textContent || '')) return;
+      ph.setAttribute('data-qb-chk-thumb', '1');
     });
   }
 
