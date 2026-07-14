@@ -41,8 +41,8 @@ button[style*="background: rgb(243, 128, 87)"]:hover,
 }
 
 /* ---- typography token correction: the design has no 30px style ----- */
-[style*="font-size: 30px"] { font-size: 32px !important; }
-[style*="clamp(22px, 3vw, 30px)"] { font-size: clamp(22px, 3vw, 32px) !important; }
+[style*="font-size: 30px"] { font-size: 28px !important; color: rgb(0, 0, 0) !important; }
+[style*="clamp(22px, 3vw, 30px)"] { font-size: clamp(22px, 3vw, 28px) !important; }
 
 /* utility chrome inherits the brand font */
 .qb-mdrawer-x, .qb-langpop, .qb-langpop * { font-family: 'Poppins', sans-serif; }
@@ -89,7 +89,7 @@ button[style*="background: rgb(243, 128, 87)"]:hover,
 svg[fill="rgb(27,173,7)"] { fill: rgb(0, 195, 91) !important; }
 html[data-screen="product"] [style*="color: rgb(75, 75, 75)"][style*="font-size: 15px"] {
   color: rgb(153, 153, 153) !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
 }
 
 /* ---- card hover: same design family, one step stronger ----- */

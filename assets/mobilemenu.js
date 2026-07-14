@@ -492,7 +492,7 @@
         +   "grid-template-areas:'av nm bt' 'av st bt';column-gap:18px;align-items:center}"
         + '.qb-sbar > .qb-savatar{grid-area:av}'
         + '.qb-sbar > .qb-savatar + div{grid-area:nm;align-self:end}'
-        + '.qb-sbar > .qb-sstats{grid-area:st;align-self:start}'
+        + '.qb-sbar > .qb-sstats{grid-area:st;align-self:start;font-size:20px !important}'
         + '.qb-sbar > :last-child{grid-area:bt}'
         + '}';
       (document.head || document.documentElement).appendChild(sst);
