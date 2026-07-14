@@ -34,7 +34,11 @@
     +   'html[data-screen="account"] body:not(.qb-acct-open) .qb-logout-box{display:none !important}'
     +   'html[data-screen="account"] body:not(.qb-acct-open) .qb-acct-id .nm{font-size:20px}'
     +   'html[data-screen="account"] body:not(.qb-acct-open) .qb-acct-id .em{font-size:14px}'
-    + '}';
+    + '}'
+    /* engine modals (z:120) live inside the page wrapper's stacking context
+       (it animates), so they can never out-stack the z:50 sticky header —
+       instead the header steps down while a modal is open */
+    + 'html.qb-eng-modal header{z-index:0 !important}';
   var st = document.createElement('style'); st.textContent = CSS;
   (document.head || document.documentElement).appendChild(st);
 
@@ -57,6 +61,12 @@
     card.insertBefore(id, card.firstChild);
   }
 
-  inject();
-  new MutationObserver(inject).observe(document.documentElement, { childList: true, subtree: true });
+  function modalWatch() {
+    var open = !!document.querySelector('[style*="position: fixed"][style*="z-index: 120"]');
+    document.documentElement.classList.toggle('qb-eng-modal', open);
+  }
+
+  function apply() { inject(); modalWatch(); }
+  apply();
+  new MutationObserver(apply).observe(document.documentElement, { childList: true, subtree: true });
 })();

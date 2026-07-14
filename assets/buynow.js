@@ -239,16 +239,20 @@
     document.querySelectorAll('.qb-navitem-active').forEach(function (x) {
       if (x === navItem) return;
       x.classList.remove('qb-navitem-active');
-      // the engine also paints the active item's text white INLINE — clear it,
-      // otherwise the item becomes white-on-white (invisible but taking space)
-      x.style.color = '';
+      // the engine paints its active item white INLINE and semibold — reset
+      // both to the unselected look (otherwise it stays bold dark above ours)
+      x.style.color = 'rgb(75,75,75)';
+      x.style.fontWeight = '400';
       [].forEach.call(x.querySelectorAll('*'), function (c) {
-        if (c.style && /255,\s*255,\s*255|#fff/i.test(c.style.color || '')) c.style.color = '';
+        if (!c.style) return;
+        if (/255,\s*255,\s*255|#fff/i.test(c.style.color || '')) c.style.color = '';
+        if (/255,\s*255,\s*255|#fff/i.test(c.style.stroke || '')) c.style.stroke = '';
       });
     });
     navItem.classList.add('qb-navitem-active');
-    // engine actives are white text+icon; mirror that exactly
+    // engine actives are white semibold text+icon; mirror that exactly
     navItem.style.color = '#fff';
+    navItem.style.fontWeight = '600';
     [].forEach.call(navItem.querySelectorAll('*'), function (c) {
       if (!c.style) return;
       c.style.color = '#fff';
