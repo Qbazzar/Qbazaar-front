@@ -724,7 +724,101 @@
     row.parentElement.insertBefore(r, row);
   }
 
-  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); acctBack(); catParentCompact(); }
+  // Category listing (69:467 desktop / 544:38513 tablet / 623:30012 phone):
+  // desktop list keeps the design's own "Tod Ad" badge; the grid view and
+  // phones use the PRICE pill instead (and hide the duplicate price line);
+  // tablets show no badge at all. Phones drop crumbs + wide pills and get
+  // the heart/search circles next to Filter/Newest.
+  function catListView() {
+    if ((window.__QB_SCREEN || '') !== 'category') return;
+    if (!document.getElementById('qb-catlist-css')) {
+      var st = document.createElement('style');
+      st.id = 'qb-catlist-css';
+      st.textContent = ''
+        /* view toggles: design active = dark icon on white, inactive = light gray */
+        + 'html[data-screen="category"] [style*="width: 44px"][style*="background: rgb(243, 128, 87)"]{'
+        +   'background:#fff !important;border-color:rgb(237,237,237) !important;color:rgb(33,33,33) !important}'
+        + 'html[data-screen="category"] [style*="width: 44px"][style*="color: rgb(117, 117, 117)"]{'
+        +   'color:rgb(201,201,201) !important}'
+        /* grid view + phones: badge becomes the price; duplicate price line hides */
+        + '.qb-price-dup{display:none !important}'
+        + '@media (min-width:1001px){'
+        /* sort + action pills are 20px in the design */
+        +   'html[data-screen="category"] [style*="gap: 8px"][style*="border-radius: 12px"][style*="background: rgb(255, 255, 255)"]{font-size:20px !important}'
+        + '}'
+        + '@media (max-width:1000px){'
+        /* tablet + phone: no view toggles */
+        +   'html[data-screen="category"] [style*="width: 44px"][style*="border-radius: 12px"]{display:none !important}'
+        + '}'
+        + '@media (min-width:601px) and (max-width:1000px){'
+        /* tablet rows carry no badge in the design */
+        +   'html[data-screen="category"] .qb-cat-badge{display:none !important}'
+        + '}'
+        + '@media (max-width:600px){'
+        +   'html[data-screen="category"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"],'
+        +   'html[data-screen="category"] [style*="gap: 8px"][style*="color: rgb(164, 173, 186)"]{display:none !important}'
+        +   'html[data-screen="category"] .qb-cp-hide{display:none !important}'
+        +   '.qb-cat-circles{display:flex !important}'
+        + '}'
+        + '.qb-cat-circles{display:none;align-items:center;gap:10px;margin-left:auto}'
+        + '.qb-cat-circles .ic{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgb(237,237,237);'
+        +   'display:flex;align-items:center;justify-content:center;cursor:pointer}';
+      (document.head || document.documentElement).appendChild(st);
+    }
+    var isPhoneW = window.matchMedia('(max-width: 600px)').matches;
+    var cards = document.querySelectorAll('.qb-card');
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      var badge = [].find.call(card.querySelectorAll('span'), function (s) {
+        return s.childElementCount === 0 && /^(Tod Ad|QAR [\d,]+)$/.test((s.textContent || '').trim())
+          && /position:\s*absolute/.test(s.getAttribute('style') || '');
+      });
+      if (!badge) continue;
+      badge.classList.add('qb-cat-badge');
+      var price = [].find.call(card.querySelectorAll('*'), function (e) {
+        return e.childElementCount === 0 && e !== badge && /^QAR [\d,]+$/.test((e.textContent || '').trim());
+      });
+      var inGrid = !!card.parentElement && /grid-template-columns/.test(card.parentElement.getAttribute('style') || '');
+      if (price) {
+        if (inGrid || isPhoneW) {
+          var pt = (price.textContent || '').trim();
+          if ((badge.textContent || '').trim() !== pt) badge.textContent = pt;
+          price.classList.add('qb-price-dup');
+        } else {
+          if ((badge.textContent || '').trim() !== 'Tod Ad') badge.textContent = 'Tod Ad';
+          price.classList.remove('qb-price-dup');
+        }
+      }
+    }
+    // phone: hide the wide pills, add heart/search circles to the Filter/Newest row
+    var fav = [].find.call(document.querySelectorAll('button, .qb-card'), function (e) {
+      return /Add to Favorite/.test(e.textContent || '') && (e.textContent || '').trim().length < 30;
+    });
+    if (fav) {
+      var pillRow = fav.parentElement;
+      if (pillRow) pillRow.classList.add('qb-cp-hide');
+    }
+    var newest = [].find.call(document.querySelectorAll('*'), function (e) {
+      return e.childElementCount <= 1 && /^Newest/.test((e.textContent || '').trim());
+    });
+    var row = newest && newest.closest('[style*="justify-content: space-between"]');
+    if (row && !row.querySelector('.qb-cat-circles')) {
+      var c = document.createElement('span');
+      c.className = 'qb-cat-circles';
+      c.innerHTML = '<button type="button" class="ic" data-cc="fav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
+        + '<button type="button" class="ic" data-cc="search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>';
+      c.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-cc]');
+        if (!b) return;
+        var want = b.getAttribute('data-cc') === 'fav' ? /Add to Favorite/ : /Save Search/;
+        var t = [].find.call(document.querySelectorAll('button'), function (x) { return want.test(x.textContent || ''); });
+        if (t) t.click();
+      });
+      row.appendChild(c);
+    }
+  }
+
+  function apply() { tagCluster(); build(); footerAcc(); ensureFilterTrigger(); tagMessages(); guestHeader(); sellerHero(); locationWord(); chatMenuIcons(); sellerCompact(); tagCatGrid(); emojiSwap(); acctBack(); catParentCompact(); catListView(); }
 
   function start() {
     apply();
