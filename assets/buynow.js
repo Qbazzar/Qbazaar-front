@@ -158,7 +158,7 @@
     };
     var srow = 'display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr .9fr;gap:16px;align-items:center;';
     var trow = function (item, buyer, date, method, status, scolor, amount) {
-      return '<div style="' + srow + 'padding:18px 0;border-top:1px solid #f3f3f3">'
+      return '<div class="qb-wrow" style="' + srow + 'padding:18px 0;border-top:1px solid #f3f3f3">'
         + '<div style="min-width:0"><div style="font:600 16px Poppins;color:#333">' + item + '</div>'
         + '<div style="font:400 15px Poppins;color:#999;margin-top:4px">' + buyer + '</div></div>'
         + '<div style="font:500 16px Poppins;color:#8e8e8e">' + date + '</div>'
@@ -171,12 +171,12 @@
     panel.innerHTML = ''
       + '<div style="font:600 20px Poppins;color:#424242">Wallet</div>'
       + '<div style="font:500 14px Poppins;color:#9e9e9e;margin:6px 0 24px">View your wallet balance, manage payment methods, and track your transactions.</div>'
-      + '<div style="display:flex;gap:20px;flex-wrap:wrap">'
+      + '<div class="qb-wstats" style="display:flex;gap:20px;flex-wrap:wrap">'
       + stat('Total Revenue', 'QAR 450.00') + stat('Complete Sales', '3') + stat('Pending Payout', 'QAR 100.00')
       + '</div>'
-      + '<div style="' + card + 'margin-top:28px;padding:26px 28px">'
+      + '<div class="qb-wtable" style="' + card + 'margin-top:28px;padding:26px 28px">'
       + '<div style="font:600 24px Poppins;color:#333;margin-bottom:20px">Transaction History</div>'
-      + '<div style="' + srow + 'padding-bottom:14px"><div style="font:500 16px Poppins;color:#8e8e8e">Item &amp; Buyer</div>'
+      + '<div class="qb-wrow" style="' + srow + 'padding-bottom:14px"><div style="font:500 16px Poppins;color:#8e8e8e">Item &amp; Buyer</div>'
       + '<div style="font:500 16px Poppins;color:#8e8e8e">Date</div><div style="font:500 16px Poppins;color:#8e8e8e">Payment Method</div>'
       + '<div style="font:500 16px Poppins;color:#8e8e8e">Status</div><div style="font:500 16px Poppins;color:#8e8e8e;text-align:right">Amount</div></div>'
       + trow('Neutrogena Cream', 'Farah M.', 'June 2, 2026', 'PayPal', 'Complete', 'rgb(27,173,7)', 'QAR 60.00')
@@ -189,19 +189,30 @@
     if (!document.getElementById('qb-wallet-css')) {
       var wst = document.createElement('style');
       wst.id = 'qb-wallet-css';
-      wst.textContent = '.qb-wallet-host > :not(.qb-wallet-panel){display:none !important}';
+      wst.textContent = '.qb-wallet-host > :not(.qb-wallet-panel){display:none !important}'
+        + '@media (max-width:600px){'
+        + '.qb-wallet-panel .qb-wstats{flex-direction:column}'
+        + '.qb-wallet-panel .qb-wstats > div{min-width:0 !important}'
+        + '.qb-wallet-panel .qb-wtable{overflow-x:auto;-webkit-overflow-scrolling:touch}'
+        + '.qb-wallet-panel .qb-wrow{min-width:560px}'
+        + '}';
       document.head.appendChild(wst);
     }
     content.appendChild(panel);
-    // highlight Wallet in the settings nav
+  }
+  // keep Wallet the ONLY active nav item — the engine re-activates its own
+  // item on every re-render, so this must run on every pass, not once
+  function walletNav() {
+    if (!window.__QB_WALLET || !document.querySelector('.qb-wallet-panel')) return;
     var w = [].find.call(document.querySelectorAll('*'), function (e) {
       return e.childElementCount === 0 && (e.textContent || '').trim() === 'Wallet';
     });
     var navItem = w && w.closest('.qb-navitem');
-    if (navItem) {
-      document.querySelectorAll('.qb-navitem-active').forEach(function (x) { x.classList.remove('qb-navitem-active'); });
-      navItem.classList.add('qb-navitem-active');
-    }
+    if (!navItem) return;
+    document.querySelectorAll('.qb-navitem-active').forEach(function (x) {
+      if (x !== navItem) x.classList.remove('qb-navitem-active');
+    });
+    navItem.classList.add('qb-navitem-active');
   }
   // settings-nav Wallet item navigates to the wallet page
   document.addEventListener('click', function (e) {
@@ -215,7 +226,7 @@
     }
   }, true);
 
-  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); walletize(); }
+  function run() { transform(); rewireProduct(); transformCheckout(); wireCheckout(); walletize(); walletNav(); }
   run();
   new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();
