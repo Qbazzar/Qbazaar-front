@@ -221,24 +221,36 @@
     });
     navItem.classList.add('qb-navitem-active');
   }
-  // on the wallet page, choosing another settings item exits wallet mode and
-  // lets the engine switch its own panel natively
+  // on the wallet page, choosing another settings item goes back to the real
+  // account page and auto-opens that item there — the engine then owns the
+  // panel and the highlight natively (no state fighting)
   document.addEventListener('click', function (e) {
     if (!window.__QB_WALLET) return;
     var item = e.target.closest && e.target.closest('.qb-navitem');
     if (!item) return;
-    var t = (item.textContent || '').trim();
+    var t = (item.textContent || '').trim().split('\n')[0].trim();
     if (/^Wallet\b/.test(t) || /Log Out/.test(t)) return;
-    window.__QB_WALLET = 0;
-    var host = document.querySelector('.qb-wallet-host');
-    if (host) host.classList.remove('qb-wallet-host');
-    var panel = document.querySelector('.qb-wallet-panel');
-    if (panel) panel.remove();
-    // hand the highlight back to the engine: only the clicked item stays lit
-    document.querySelectorAll('.qb-navitem-active').forEach(function (x) {
-      if (x !== item) x.classList.remove('qb-navitem-active');
-    });
-  });
+    e.preventDefault(); e.stopImmediatePropagation();
+    location.href = 'account.html#go=' + encodeURIComponent(t);
+  }, true);
+  // account page: honour #go=<nav label> by clicking that item once ready
+  function goHash() {
+    if (window.__QB_WALLET || (window.__QB_SCREEN || '') !== 'account') return;
+    var m = /#go=([^&]+)/.exec(location.hash || '');
+    if (!m) return;
+    var label = decodeURIComponent(m[1]);
+    var tries = 0;
+    (function attempt() {
+      var item = [].find.call(document.querySelectorAll('.qb-navitem'), function (x) {
+        return (x.textContent || '').indexOf(label) !== -1;
+      });
+      if (item) {
+        history.replaceState(null, '', location.pathname);
+        item.click();
+      } else if (++tries < 20) setTimeout(attempt, 250);
+    })();
+  }
+  goHash();
   // settings-nav Wallet item navigates to the wallet page
   document.addEventListener('click', function (e) {
     var t = e.target;

@@ -123,6 +123,8 @@
       var c = document.createElement('canvas');
       c.width = 512; c.height = 512;
       var ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff'; // transparent PNGs must not turn black in JPEG
+      ctx.fillRect(0, 0, 512, 512);
       var s = scale();
       var f = 512 / 260; // crop circle diameter 260 within 300 viewport
       var off = (300 - 260) / 2;
@@ -130,6 +132,7 @@
       var data = c.toDataURL('image/jpeg', 0.9);
       back.remove();
       try { localStorage.setItem('qbAvatar', data); } catch (e) {}
+      avatarChecked = true; // freshly produced, known-good
       applyAvatars();
       designToast('Your profile photo has been updated successfully.');
       if (onDone) onDone(data);
@@ -137,10 +140,24 @@
   }
 
   // paint the saved photo onto every avatar circle (header FA, profile FA, seller BT...)
+  // The default FA avatar must NEVER disappear: only paint once the stored
+  // image is validated; a corrupt/failed image clears itself.
+  var avatarChecked = null; // null=unknown, true=valid, false=invalid/none
   function applyAvatars() {
     var data = null;
     try { data = localStorage.getItem('qbAvatar'); } catch (e) {}
-    if (!data) return;
+    if (!data || avatarChecked === false) return;
+    if (avatarChecked === null) {
+      avatarChecked = false; // block until probe finishes
+      var probe = new Image();
+      probe.onload = function () {
+        if (probe.naturalWidth > 10) { avatarChecked = true; applyAvatars(); }
+        else { try { localStorage.removeItem('qbAvatar'); } catch (e) {} }
+      };
+      probe.onerror = function () { try { localStorage.removeItem('qbAvatar'); } catch (e) {} };
+      probe.src = data;
+      return;
+    }
     var els = document.querySelectorAll('div, span, button, a');
     for (var i = 0; i < els.length; i++) {
       var e = els[i];
