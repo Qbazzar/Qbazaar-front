@@ -13,7 +13,7 @@ follows the prototype user journeys from the Figma file.
 |---|---|
 | Repo | `github.com/Qbazzar/Qbazaar-front` (branch `main`) |
 | Live (GitHub Pages) | served from `main` (`.nojekyll` present) |
-| Live (VPS) | `http://187.53.139.138/` (cPanel server, IP only, see [Deployment](#deployment)) |
+| Live (VPS) | **https://srv1977263.hstgr.cloud/** (cPanel server; the bare IP redirects here, see [Deployment](#deployment)) |
 | Design source | Figma file `Cvn7hexeu07FIOyJhDDCLd`, offline copy `D:\Doc\figma file\QBazaar _ كيو بازار.fig` |
 | Status | Design build complete and verified (see [Status](#status)) |
 
@@ -162,6 +162,9 @@ The site is **static files only**. Any web server that serves a folder works.
 vhost (`/var/www/html`), which only held cPanel's "default web page" redirect.
 
 **Current setup (IP only, no domain):** the files go into `/var/www/html`.
+HTTPS uses AutoSSL's Let's Encrypt certificate for the server hostname `srv1977263.hstgr.cloud`, because no certificate can be issued for a bare IP.
+`.htaccess` sends the IP and plain http to `https://srv1977263.hstgr.cloud` with a temporary 302. Change that hostname once a domain exists.
+cPanel/WHM: open **https://srv1977263.hstgr.cloud:2087** (WHM) or **:2083** (cPanel), not the IP, which gives a certificate warning.
 
 ```bash
 # one-time: add an ssh alias (key: ~/.ssh/qbazaar_root, its .pub in the server's /root/.ssh/authorized_keys)

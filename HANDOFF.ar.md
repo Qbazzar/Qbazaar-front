@@ -51,6 +51,9 @@ python -m http.server 8793
 (مجلد `/home` ما فيه أي يوزر) والملفات مش بأي مجلد بيخدمه السيرفر. لما تفتح الـ IP، Apache بيروح على
 `/var/www/html`، وهذا كان فيه بس صفحة cPanel الافتراضية.
 
+**رابط الموقع:** https://srv1977263.hstgr.cloud/ (الـ IP بيحوّل عليه لحاله، والشهادة Let's Encrypt على اسم السيرفر).
+**لوحة WHM:** https://srv1977263.hstgr.cloud:2087 و**cPanel:** https://srv1977263.hstgr.cloud:2083. افتحهم بالاسم مش بالـ IP.
+
 **الوضع الحالي (IP بدون دومين):** الملفات بتنحط في `/var/www/html` عن طريق السكربت:
 ```bash
 tools/deploy.sh      # من Git Bash، من جذر الريبو، وبيرفع آخر commit
