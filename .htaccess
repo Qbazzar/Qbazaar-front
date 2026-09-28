@@ -1,0 +1,36 @@
+# Apache config for the static QBazaar frontend (cPanel / EasyApache 4).
+DirectoryIndex index.html
+Options -Indexes
+
+# Keep dev/reference material off the public web.
+RedirectMatch 404 ^/(docs|tools)(/|$)
+RedirectMatch 404 /\.(git|claude)(/|$)
+
+# images/ holds extensionless hash-named PNG+JPEG files: no single ForceType fits,
+# so Apache sends no Content-Type and browsers sniff them (same as GitHub Pages).
+<IfModule mod_mime.c>
+    AddType image/svg+xml .svg
+</IfModule>
+<FilesMatch "^[0-9a-f]{40}$">
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresDefault "access plus 90 days"
+    </IfModule>
+</FilesMatch>
+
+# app.js + styles.css are ~1MB together; gzip cuts them by ~80%.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript image/svg+xml application/json
+</IfModule>
+
+# Assets are versioned with ?v=N, so they can be cached long; HTML must stay fresh.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 30 days"
+    ExpiresByType application/javascript "access plus 30 days"
+    ExpiresByType text/javascript "access plus 30 days"
+    ExpiresByType image/jpeg "access plus 90 days"
+    ExpiresByType image/png "access plus 90 days"
+    ExpiresByType image/svg+xml "access plus 90 days"
+</IfModule>
