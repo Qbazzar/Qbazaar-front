@@ -2,6 +2,17 @@
 DirectoryIndex index.html
 Options -Indexes
 
+# No domain yet: the only valid TLS certificate is AutoSSL's for the server hostname,
+# so send the bare IP and plain http there. ACME challenges must stay reachable over
+# http for AutoSSL renewals. Replace the hostname once a real domain is attached.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/\.well-known/
+    RewriteCond %{HTTPS} off [OR]
+    RewriteCond %{HTTP_HOST} !^srv1977263\.hstgr\.cloud$ [NC]
+    RewriteRule ^ https://srv1977263.hstgr.cloud%{REQUEST_URI} [R=302,L]
+</IfModule>
+
 # Keep dev/reference material off the public web.
 RedirectMatch 404 ^/(docs|tools)(/|$)
 RedirectMatch 404 /\.(git|claude)(/|$)
