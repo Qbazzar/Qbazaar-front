@@ -54,6 +54,7 @@
       var url = URL.createObjectURL(f);
       buildModal(url, onDone);
     });
+    input.addEventListener('cancel', function () { input.remove(); });
     input.click();
   }
 
@@ -70,6 +71,7 @@
       + '<button type="button" class="save">Save Photo</button></div>'
       + '</div>';
     document.body.appendChild(back);
+    function close() { back.remove(); URL.revokeObjectURL(url); }
     var vp = back.querySelector('.qb-crop-vp');
     var img = back.querySelector('img');
     var range = back.querySelector('input[type=range]');
@@ -117,8 +119,8 @@
     });
     vp.addEventListener('pointerup', function () { drag = null; vp.classList.remove('drag'); });
 
-    back.querySelector('.cancel').addEventListener('click', function () { back.remove(); });
-    back.addEventListener('click', function (e) { if (e.target === back) back.remove(); });
+    back.querySelector('.cancel').addEventListener('click', close);
+    back.addEventListener('click', function (e) { if (e.target === back) close(); });
     back.querySelector('.save').addEventListener('click', function () {
       var c = document.createElement('canvas');
       c.width = 512; c.height = 512;
@@ -130,7 +132,7 @@
       var off = (300 - 260) / 2;
       ctx.drawImage(img, (state.x - off) * f, (state.y - off) * f, state.iw * s * f, state.ih * s * f);
       var data = c.toDataURL('image/jpeg', 0.9);
-      back.remove();
+      close();
       try { localStorage.setItem('qbAvatar', data); } catch (e) {}
       avatarChecked = true; // freshly produced, known-good
       applyAvatars();

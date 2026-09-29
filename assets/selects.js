@@ -78,7 +78,7 @@
   }
   function setValue(ctrl, v) {
     var n = labelSpan(ctrl);
-    if (n) { if (n.nodeType === 3) n.textContent = v; else n.textContent = v; }
+    if (n) n.textContent = v;
     ctrl.style.color = 'rgb(51,51,51)';
     closeAll();
   }
@@ -181,12 +181,13 @@
     }
     // designed default: Pickup Only active (323:10693)
     if (!window.__qbPickupDone) {
-      var po = [].find.call(document.querySelectorAll('*'), function (e) {
-        return e.childElementCount === 0 && (e.textContent || '').trim() === 'Pickup Only';
-      });
-      var da = [].find.call(document.querySelectorAll('*'), function (e) {
-        return e.childElementCount === 0 && (e.textContent || '').trim() === 'Delivery Available';
-      });
+      var po = null, da = null, all = document.querySelectorAll('*');
+      for (var k = 0; k < all.length && !(po && da); k++) {
+        if (all[k].childElementCount) continue;
+        var tx = (all[k].textContent || '').trim();
+        if (!po && tx === 'Pickup Only') po = all[k];
+        else if (!da && tx === 'Delivery Available') da = all[k];
+      }
       if (po && da) {
         var daBox = da.closest('[style*="border"]');
         if (daBox && /rgb\(243,\s*128,\s*87\)/.test(daBox.getAttribute('style') || '')) {
