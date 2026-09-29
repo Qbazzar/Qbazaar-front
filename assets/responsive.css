@@ -136,15 +136,11 @@ img, svg, video { max-width: 100%; }
   header * { min-width: 0; }
 
   /* full-width primary actions read better on a phone */
-  .qb-btn[style*="width:100%"],
   .qb-btn[style*="width: 100%"] { width: 100% !important; }
 
   /* tighten oversized fixed widths so cards fit the screen */
-  [style*="min-width:300px"],
   [style*="min-width: 300px"],
-  [style*="min-width:560px"],
-  [style*="min-width: 560px"],
-  [style*="flex:2 1 560px"] { min-width: 0 !important; }
+  [style*="min-width: 560px"] { min-width: 0 !important; }
 
   /* chat message cards + bubbles fit narrow screens */
   .qb-oc { width: 100%; max-width: 100%; }
@@ -199,16 +195,8 @@ img, svg, video { max-width: 100%; }
     white-space: nowrap;
   }
 
-  /* Notification cards: on a phone the design thumbnail is a narrow left rail,
-     not half the card — shrink the image so the text column gets real room and
-     stops wrapping every word. Scoped to the notification row only. */
-  [style*="min-height: 180px"][style*="border-radius: 24px"] { min-height: 128px !important; }
-  [style*="min-height: 180px"][style*="border-radius: 24px"] > .qb-ph {
-    width: 116px !important;
-    min-width: 116px !important;
-    max-width: 116px !important;
-    border-radius: 18px !important;
-  }
+  /* Notification cards: on a phone give the text column tighter padding so it
+     gets real room and stops wrapping every word. Scoped to the notification row only. */
   [style*="min-height: 180px"][style*="border-radius: 24px"] > [style*="flex: 1 1 0%"] {
     padding: 10px 6px !important;
     gap: 12px !important;

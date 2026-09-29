@@ -43,7 +43,6 @@ main { flex: 1; display: flex; align-items: center; justify-content: center; pad
 .qb-card h1 { font: 600 28px/1.3 Poppins; color: var(--ink); text-align: center; }
 .qb-card h1 .hl { color: var(--orange); }
 .qb-sub { font: 400 16px/1.55 Poppins; color: var(--muted); text-align: center; margin-top: 10px; }
-.qb-sub .hl { color: var(--orange); font-weight: 500; }
 .qb-sub .edit { color: var(--orange); font-weight: 500; text-decoration: underline; cursor: pointer; }
 
 .qb-socials { display: flex; gap: 16px; margin: 30px 0 4px; }
@@ -77,7 +76,6 @@ main { flex: 1; display: flex; align-items: center; justify-content: center; pad
 .qb-check input { width: 18px; height: 18px; accent-color: var(--orange); }
 a.qb-link { color: var(--orange); font: 500 15px Poppins; text-decoration: none; }
 a.qb-link:hover { text-decoration: underline; }
-a.qb-link.red { color: #ff0000; }
 
 .qb-btn {
   display: block; width: 100%; height: 56px; margin-top: 26px;
@@ -99,7 +97,7 @@ a.qb-link.red { color: #ff0000; }
 .qb-terms { display: flex; gap: 10px; align-items: flex-start; margin-top: 20px; font: 400 15px/1.55 Poppins; color: #909090; text-align: left; }
 .qb-terms input { width: 17px; height: 17px; margin-top: 3px; accent-color: var(--ink); flex: 0 0 auto; }
 .qb-terms a { color: var(--orange); text-decoration: underline; }
-.qb-langpanel { position: absolute; top: calc(100% + 10px); right: 0; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.14); padding: 8px; width: 210px; z-index: 50; }
+.qb-langpanel { position: absolute; top: calc(100% + 10px); background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.14); padding: 8px; width: 210px; z-index: 50; }
 .qb-langpanel h5 { font: 600 11px Poppins; letter-spacing: .06em; text-transform: uppercase; color: #999; padding: 6px 10px; margin: 0; }
 .qb-langpanel button { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; padding: 9px 10px; border-radius: 9px; cursor: pointer; font: 500 14px Poppins; color: #333; text-align: left; }
 .qb-langpanel button:hover { background: rgb(250, 250, 250); }
