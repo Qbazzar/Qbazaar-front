@@ -75,7 +75,7 @@
       body = '<div class="qb-oc-status ' + m[0] + '">' + (ICON[m[0]] || '') + ' ' + esc(m[1]) + '</div>';
     }
     return '<div class="qb-oc">'
-      + '<span class="qb-oc-tag ' + d.kind + '">' + kindLabel + '</span>'
+      + '<span class="qb-oc-tag ' + esc(d.kind) + '">' + kindLabel + '</span>'
       + '<div class="qb-oc-head"><div class="qb-oc-thumb" style="background-image:url(\'' + THUMB + '\')"></div>'
       + '<div><div class="qb-oc-title">' + esc(d.title) + '</div><div class="qb-oc-price">' + priceLine + '</div></div></div>'
       + body + '</div>';

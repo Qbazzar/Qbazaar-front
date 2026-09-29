@@ -6,10 +6,14 @@
       swaps the price block for the designed "Contact Details" pill + copy;
    2) on product pages: points the "Buy Now" button at buy-now.html. */
 (function () {
+  function isTextLeaf(e, txt) {
+    return e.childElementCount === 0 && (e.textContent || '').trim() === txt;
+  }
   function leaf(txt) {
-    return [].find.call(document.querySelectorAll('*'), function (e) {
-      return e.childElementCount === 0 && (e.textContent || '').trim() === txt;
-    });
+    return [].find.call(document.querySelectorAll('*'), function (e) { return isTextLeaf(e, txt); });
+  }
+  function leaves(txt) {
+    return [].filter.call(document.querySelectorAll('*'), function (e) { return isTextLeaf(e, txt); });
   }
 
   function transform() {
@@ -29,10 +33,7 @@
     }
     title.textContent = 'Buy Now';
     document.title = 'Q Bazaar — Buy Now';
-    var crumb = [].filter.call(document.querySelectorAll('*'), function (e) {
-      return e.childElementCount === 0 && (e.textContent || '').trim() === 'Make an Offer';
-    });
-    crumb.forEach(function (c) { c.textContent = 'Buy Now'; });
+    leaves('Make an Offer').forEach(function (c) { c.textContent = 'Buy Now'; });
 
     // "Your Offer" + amount input + QAR quick chips -> Contact Details pill
     var yo = leaf('Your Offer');
@@ -231,9 +232,7 @@
   // item on every re-render, so this must run on every pass, not once
   function walletNav() {
     if (!window.__QB_WALLET || !document.querySelector('.qb-wallet-panel')) return;
-    var w = [].find.call(document.querySelectorAll('*'), function (e) {
-      return e.childElementCount === 0 && (e.textContent || '').trim() === 'Wallet';
-    });
+    var w = leaf('Wallet');
     var navItem = w && w.closest('.qb-navitem');
     if (!navItem) return;
     document.querySelectorAll('.qb-navitem-active').forEach(function (x) {
