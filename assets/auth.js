@@ -3,7 +3,7 @@
 (function () {
   // forms that land on index.html complete the journey -> signed in
   document.querySelectorAll('form[action="index.html"]').forEach(function (f) {
-    f.addEventListener('submit', function () { localStorage.setItem('qbAuth', '1'); });
+    f.addEventListener('submit', function () { try { localStorage.setItem('qbAuth', '1'); } catch (err) {} });
   });
   document.querySelectorAll('.qb-eye').forEach(function (b) {
     b.addEventListener('click', function () {
