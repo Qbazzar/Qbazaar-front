@@ -136,11 +136,15 @@ img, svg, video { max-width: 100%; }
   header * { min-width: 0; }
 
   /* full-width primary actions read better on a phone */
+  .qb-btn[style*="width:100%"],
   .qb-btn[style*="width: 100%"] { width: 100% !important; }
 
   /* tighten oversized fixed widths so cards fit the screen */
+  [style*="min-width:300px"],
   [style*="min-width: 300px"],
-  [style*="min-width: 560px"] { min-width: 0 !important; }
+  [style*="min-width:560px"],
+  [style*="min-width: 560px"],
+  [style*="flex:2 1 560px"] { min-width: 0 !important; }
 
   /* chat message cards + bubbles fit narrow screens */
   .qb-oc { width: 100%; max-width: 100%; }
