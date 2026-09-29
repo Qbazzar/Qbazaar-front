@@ -37,7 +37,7 @@
     + '.qb-burger span::before{top:-6px}.qb-burger span::after{top:6px}'
     + '.qb-mbell{display:none;position:fixed;top:14px;right:68px;z-index:99990;width:44px;height:44px;'
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
-    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);text-decoration:none;color:#212121;position:fixed}'
+    +   'cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.06);text-decoration:none;color:#212121}'
     + '.qb-mbell .dot{position:absolute;top:11px;right:12px;width:7px;height:7px;border-radius:50%;background:' + ORANGE + '}'
     + '.qb-mglobe{display:none;position:fixed;top:14px;right:120px;z-index:99990;width:44px;height:44px;'
     +   'border-radius:12px;border:1px solid rgb(237,237,237);background:#fff;align-items:center;justify-content:center;'
@@ -269,10 +269,29 @@
   }
 
   var FUNNEL = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:0 0 auto"><path d="M3 5h18l-7 8v5l-4 2v-7z"/></svg>';
+  var CIRCLE_HEART = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var CIRCLE_SEARCH = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+
+  function ensureStyle(id, css) {
+    if (document.getElementById(id)) return;
+    var s = document.createElement('style');
+    s.id = id; s.textContent = css;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  function whiteCardOf(el) {
+    while (el && !/rgb\(255,\s*255,\s*255\)/.test(el.getAttribute('style') || '')) el = el.parentElement;
+    return el;
+  }
 
   function openSheet() { document.body.classList.add('qb-sheet-open'); }
   function closeSheet() { document.body.classList.remove('qb-sheet-open'); }
-  function isPhone() { return window.matchMedia('(max-width: 1000px)').matches; }
+  function isCompact() { return window.matchMedia('(max-width: 1000px)').matches; }
+  function isFilterLeaf(n) {
+    if (n.children.length !== 0 || (n.textContent || '').trim() !== 'Filter') return false;
+    var p = n.parentElement;
+    return !!p && /space-between/.test(p.getAttribute('style') || '');
+  }
 
   // One-time wiring for the mobile filter sheet. Deliberately touches ONLY <body>
   // (never the engine-managed sidebar), so it can't fight the engine's re-renders
@@ -293,15 +312,12 @@
     // Open when the (otherwise inert) "Filter" button is tapped — via delegation,
     // so no per-element wiring and nothing to re-attach after a re-render.
     document.addEventListener('click', function (e) {
-      if (!isPhone()) return;
+      if (!isCompact()) return;
       var el = e.target;
       for (var i = 0; i < 3 && el; i++) {
         if (el.nodeType === 1) {
           if (el.classList && el.classList.contains('qb-filter-btn')) { openSheet(); return; }
-          if (el.children.length === 0 && (el.textContent || '').trim() === 'Filter') {
-            var p = el.parentElement;
-            if (p && /space-between/.test(p.getAttribute('style') || '')) { openSheet(); return; }
-          }
+          if (isFilterLeaf(el)) { openSheet(); return; }
         }
         el = el.parentElement;
       }
@@ -310,7 +326,7 @@
     document.body.classList.add('qb-sheet-ready');
     // Messages: tapping a conversation in the inbox opens the chat pane
     document.addEventListener('click', function (e) {
-      if (!isPhone()) return;
+      if (!isCompact()) return;
       var list = e.target.closest && e.target.closest('.qb-mlist');
       if (!list || e.target.tagName === 'INPUT') return;
       document.body.classList.add('qb-chat-open');
@@ -329,16 +345,13 @@
   // Cosmetic only: give the "Filter" button a pill + funnel icon on phones.
   // Runs on a few timers (never inside the observer), so it can't loop.
   function markFilterBtn() {
-    if (!isPhone()) return;
+    if (!isCompact()) return;
     var spans = document.querySelectorAll('span, button');
     for (var i = 0; i < spans.length; i++) {
       var n = spans[i];
-      if (n.children.length === 0 && (n.textContent || '').trim() === 'Filter') {
-        var p = n.parentElement;
-        if (p && /space-between/.test(p.getAttribute('style') || '')) {
-          if (!n.classList.contains('qb-filter-btn')) { n.classList.add('qb-filter-btn'); n.innerHTML = FUNNEL + '<span>Filter</span>'; }
-          return;
-        }
+      if (isFilterLeaf(n)) {
+        if (!n.classList.contains('qb-filter-btn')) { n.classList.add('qb-filter-btn'); n.innerHTML = FUNNEL + '<span>Filter</span>'; }
+        return;
       }
     }
   }
@@ -347,7 +360,7 @@
   // toolbar needs a real "Filter" trigger (design 539:35503 shows the pill).
   function ensureFilterTrigger() {
     var ex = document.querySelector('.qb-filter-inject');
-    if (!isPhone()) { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); return; }
+    if (!isCompact()) { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); return; }
     if (ex) return;
     var aside = document.querySelector('aside[style*="min-width: 260px"]');
     if (!aside) return;
@@ -442,8 +455,7 @@
       return e.childElementCount <= 1 && /^Follow$/.test((e.textContent || '').trim());
     });
     if (!follow) return;
-    var bar = follow.parentElement;
-    while (bar && !/rgb\(255,\s*255,\s*255\)/.test(bar.getAttribute('style') || '')) bar = bar.parentElement;
+    var bar = whiteCardOf(follow.parentElement);
     if (!bar) return;
     var name = (bar.textContent || '').trim().split(/\s/)[0] || 'BT';
     var caps = name.match(/[A-Z]/g) || [];
@@ -484,19 +496,14 @@
     bar.style.gap = '18px';
     // design header: name on top, stats right under it (one column), buttons right
     bar.classList.add('qb-sbar');
-    if (!document.getElementById('qb-sbar-css')) {
-      var sst = document.createElement('style');
-      sst.id = 'qb-sbar-css';
-      sst.textContent = '@media (min-width:601px){'
-        + '.qb-sbar{display:grid !important;grid-template-columns:auto 1fr auto;'
-        +   "grid-template-areas:'av nm bt' 'av st bt';column-gap:18px;align-items:center}"
-        + '.qb-sbar > .qb-savatar{grid-area:av}'
-        + '.qb-sbar > .qb-savatar + div{grid-area:nm;align-self:end}'
-        + '.qb-sbar > .qb-sstats{grid-area:st;align-self:start;font-size:20px !important}'
-        + '.qb-sbar > :last-child{grid-area:bt}'
-        + '}';
-      (document.head || document.documentElement).appendChild(sst);
-    }
+    ensureStyle('qb-sbar-css', '@media (min-width:601px){'
+      + '.qb-sbar{display:grid !important;grid-template-columns:auto 1fr auto;'
+      +   "grid-template-areas:'av nm bt' 'av st bt';column-gap:18px;align-items:center}"
+      + '.qb-sbar > .qb-savatar{grid-area:av}'
+      + '.qb-sbar > .qb-savatar + div{grid-area:nm;align-self:end}'
+      + '.qb-sbar > .qb-sstats{grid-area:st;align-self:start;font-size:20px !important}'
+      + '.qb-sbar > :last-child{grid-area:bt}'
+      + '}');
     var nameEl = [].find.call(bar.querySelectorAll('*'), function (e) {
       return e.childElementCount <= 1 && (e.textContent || '').trim() === name;
     });
@@ -551,7 +558,6 @@
       if (t === m[1]) continue; // already emoji-free (our span or clean label)
       e.dataset.qbCmi = '1';
       var label = m[1];
-      e.textContent = '';
       e.style.display = 'flex'; e.style.alignItems = 'center'; e.style.gap = '10px';
       e.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
         + 'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto">'
@@ -567,9 +573,7 @@
       var e = els[i];
       if (e.childElementCount !== 0 || (e.textContent || '').trim() !== leafText) continue;
       if (minFs && parseFloat(getComputedStyle(e).fontSize) < minFs) continue;
-      var card = e;
-      while (card && !/rgb\(255,\s*255,\s*255\)/.test(card.getAttribute('style') || '')) card = card.parentElement;
-      return card;
+      return whiteCardOf(e);
     }
     return null;
   }
@@ -655,7 +659,6 @@
       if (!hit) continue;
       e.dataset.qbEsw = '1';
       var rest = t.split(hit).join('').replace(/️/g, '').trim();
-      e.textContent = '';
       e.innerHTML = EMOJI_SVG[hit] + (rest ? '<span> ' + rest.replace(/</g, '&lt;') + '</span>' : '');
     }
   }
@@ -680,22 +683,17 @@
   // row is a Filter button + heart/search circles instead of two wide pills.
   function catParentCompact() {
     if ((window.__QB_SCREEN || '') !== 'catParent') return;
-    if (!document.getElementById('qb-catparent-css')) {
-      var st = document.createElement('style');
-      st.id = 'qb-catparent-css';
-      st.textContent = '.qb-cp-row{display:none}'
-        + '@media (max-width:600px){'
-        +   'html[data-screen="catParent"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"]{display:none !important}'
-        +   '.qb-cp-hide{display:none !important}'
-        +   '.qb-cp-row{display:flex;align-items:center;gap:10px;margin:2px 0 4px;font-family:Poppins;width:100%;flex:1 1 100%}'
-        +   '.qb-cp-row .btn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgb(237,237,237);'
-        +     'border-radius:12px;padding:11px 16px;font:500 14px Poppins;color:#212121;cursor:pointer}'
-        +   '.qb-cp-row .sp{flex:1}'
-        +   '.qb-cp-row .ic{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgb(237,237,237);'
-        +     'display:flex;align-items:center;justify-content:center;cursor:pointer}'
-        + '}';
-      (document.head || document.documentElement).appendChild(st);
-    }
+    ensureStyle('qb-catparent-css', '.qb-cp-row{display:none}'
+      + '@media (max-width:600px){'
+      +   'html[data-screen="catParent"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"]{display:none !important}'
+      +   '.qb-cp-hide{display:none !important}'
+      +   '.qb-cp-row{display:flex;align-items:center;gap:10px;margin:2px 0 4px;font-family:Poppins;width:100%;flex:1 1 100%}'
+      +   '.qb-cp-row .btn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgb(237,237,237);'
+      +     'border-radius:12px;padding:11px 16px;font:500 14px Poppins;color:#212121;cursor:pointer}'
+      +   '.qb-cp-row .sp{flex:1}'
+      +   '.qb-cp-row .ic{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgb(237,237,237);'
+      +     'display:flex;align-items:center;justify-content:center;cursor:pointer}'
+      + '}');
     var fav = [].find.call(document.querySelectorAll('button'), function (e) {
       return /Add to Favorite/.test(e.textContent || '');
     });
@@ -708,8 +706,8 @@
     r.innerHTML = '<button type="button" class="btn">Filter '
       + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M7 12h10M10 17h4"/></svg></button>'
       + '<span class="sp"></span>'
-      + '<button type="button" class="ic" data-cp="fav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
-      + '<button type="button" class="ic" data-cp="search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>';
+      + '<button type="button" class="ic" data-cp="fav">' + CIRCLE_HEART + '</button>'
+      + '<button type="button" class="ic" data-cp="search">' + CIRCLE_SEARCH + '</button>';
     r.addEventListener('click', function (e) {
       var b = e.target.closest('[data-cp]');
       if (!b) return;
@@ -731,40 +729,35 @@
   // the heart/search circles next to Filter/Newest.
   function catListView() {
     if ((window.__QB_SCREEN || '') !== 'category') return;
-    if (!document.getElementById('qb-catlist-css')) {
-      var st = document.createElement('style');
-      st.id = 'qb-catlist-css';
-      st.textContent = ''
-        /* view toggles: design active = dark icon on white, inactive = light gray */
-        + 'html[data-screen="category"] [style*="width: 44px"][style*="background: rgb(243, 128, 87)"]{'
-        +   'background:#fff !important;border-color:rgb(237,237,237) !important;color:rgb(33,33,33) !important}'
-        + 'html[data-screen="category"] [style*="width: 44px"][style*="color: rgb(117, 117, 117)"]{'
-        +   'color:rgb(201,201,201) !important}'
-        /* grid view + phones: badge becomes the price; duplicate price line hides */
-        + '.qb-price-dup{display:none !important}'
-        + '@media (min-width:1001px){'
-        /* sort + action pills are 20px in the design */
-        +   'html[data-screen="category"] [style*="gap: 8px"][style*="border-radius: 12px"][style*="background: rgb(255, 255, 255)"]{font-size:20px !important}'
-        + '}'
-        + '@media (max-width:1000px){'
-        /* tablet + phone: no view toggles */
-        +   'html[data-screen="category"] [style*="width: 44px"][style*="border-radius: 12px"]{display:none !important}'
-        + '}'
-        + '@media (min-width:601px) and (max-width:1000px){'
-        /* tablet rows carry no badge in the design */
-        +   'html[data-screen="category"] .qb-cat-badge{display:none !important}'
-        + '}'
-        + '@media (max-width:600px){'
-        +   'html[data-screen="category"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"],'
-        +   'html[data-screen="category"] [style*="gap: 8px"][style*="color: rgb(164, 173, 186)"]{display:none !important}'
-        +   'html[data-screen="category"] .qb-cp-hide{display:none !important}'
-        +   '.qb-cat-circles{display:flex !important}'
-        + '}'
-        + '.qb-cat-circles{display:none;align-items:center;gap:10px;margin-left:auto}'
-        + '.qb-cat-circles .ic{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgb(237,237,237);'
-        +   'display:flex;align-items:center;justify-content:center;cursor:pointer}';
-      (document.head || document.documentElement).appendChild(st);
-    }
+    ensureStyle('qb-catlist-css', ''
+      /* view toggles: design active = dark icon on white, inactive = light gray */
+      + 'html[data-screen="category"] [style*="width: 44px"][style*="background: rgb(243, 128, 87)"]{'
+      +   'background:#fff !important;border-color:rgb(237,237,237) !important;color:rgb(33,33,33) !important}'
+      + 'html[data-screen="category"] [style*="width: 44px"][style*="color: rgb(117, 117, 117)"]{'
+      +   'color:rgb(201,201,201) !important}'
+      /* grid view + phones: badge becomes the price; duplicate price line hides */
+      + '.qb-price-dup{display:none !important}'
+      + '@media (min-width:1001px){'
+      /* sort + action pills are 20px in the design */
+      +   'html[data-screen="category"] [style*="gap: 8px"][style*="border-radius: 12px"][style*="background: rgb(255, 255, 255)"]{font-size:20px !important}'
+      + '}'
+      + '@media (max-width:1000px){'
+      /* tablet + phone: no view toggles */
+      +   'html[data-screen="category"] [style*="width: 44px"][style*="border-radius: 12px"]{display:none !important}'
+      + '}'
+      + '@media (min-width:601px) and (max-width:1000px){'
+      /* tablet rows carry no badge in the design */
+      +   'html[data-screen="category"] .qb-cat-badge{display:none !important}'
+      + '}'
+      + '@media (max-width:600px){'
+      +   'html[data-screen="category"] [style*="gap: 8px"][style*="color: rgb(158, 158, 158)"][style*="font-size: 14px"],'
+      +   'html[data-screen="category"] [style*="gap: 8px"][style*="color: rgb(164, 173, 186)"]{display:none !important}'
+      +   'html[data-screen="category"] .qb-cp-hide{display:none !important}'
+      +   '.qb-cat-circles{display:flex !important}'
+      + '}'
+      + '.qb-cat-circles{display:none;align-items:center;gap:10px;margin-left:auto}'
+      + '.qb-cat-circles .ic{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid rgb(237,237,237);'
+      +   'display:flex;align-items:center;justify-content:center;cursor:pointer}');
     var isPhoneW = window.matchMedia('(max-width: 600px)').matches;
     var cards = document.querySelectorAll('.qb-card');
     for (var i = 0; i < cards.length; i++) {
@@ -805,8 +798,8 @@
     if (row && !row.querySelector('.qb-cat-circles')) {
       var c = document.createElement('span');
       c.className = 'qb-cat-circles';
-      c.innerHTML = '<button type="button" class="ic" data-cc="fav"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
-        + '<button type="button" class="ic" data-cc="search"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>';
+      c.innerHTML = '<button type="button" class="ic" data-cc="fav">' + CIRCLE_HEART + '</button>'
+        + '<button type="button" class="ic" data-cc="search">' + CIRCLE_SEARCH + '</button>';
       c.addEventListener('click', function (e) {
         var b = e.target.closest('[data-cc]');
         if (!b) return;
